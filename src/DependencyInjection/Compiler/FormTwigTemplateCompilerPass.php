@@ -21,6 +21,7 @@ class FormTwigTemplateCompilerPass implements CompilerPassInterface
 {
     private $phoneNumberLayout = '@MisdPhoneNumber/Form/phone_number.html.twig';
     private $phoneNumberBootstrapLayout = '@MisdPhoneNumber/Form/phone_number_bootstrap.html.twig';
+    private $phoneNumberMaterializeLayout = '@MisdPhoneNumber/Form/phone_number_materialize.html.twig';
 
     /**
      * {@inheritdoc}
@@ -42,6 +43,8 @@ class FormTwigTemplateCompilerPass implements CompilerPassInterface
             array_splice($parameter, ++$key, 0, [$this->phoneNumberBootstrapLayout]);
         } elseif (false !== ($key = array_search('bootstrap_3_layout.html.twig', $parameter))) {
             array_splice($parameter, ++$key, 0, [$this->phoneNumberBootstrapLayout]);
+        } elseif (false !== ($key = array_search('materialize_layout.html.twig', $parameter))) {
+            array_splice($parameter, ++$key, 0, [$this->phoneNumberMaterializeLayout]);
         } elseif (false !== ($key = array_search('form_div_layout.html.twig', $parameter))) {
             array_splice($parameter, ++$key, 0, [$this->phoneNumberLayout]);
         } else {

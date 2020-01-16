@@ -1,0 +1,16 @@
+{% block phone_number_widget -%}
+    {% if widget is constant('Misd\\PhoneNumberBundle\\Form\\Type\\PhoneNumberType::WIDGET_COUNTRY_CHOICE') %}
+        {% set attr = attr|merge({class: (attr.class|default('') ~ ' form-inline')|trim}) %}
+        <div class="input-field{{ attr.col_size_country|default('') ? ' col ' ~ attr.col_size_country|trim }}">
+            {{- form_widget(form.country) -}}
+            {{- form_label(form.country) -}}
+        </div>
+        <div class="input-field{{ attr.col_size|default('') ? ' col ' ~ attr.col_size|trim }}">
+            {{- form_widget(form.number) -}}
+            {{- form_label(form.number) -}}
+            {{- form_errors(form) -}}
+        </div>
+    {% else -%}
+        {{- block('form_widget_simple') -}}
+    {%- endif %}
+{%- endblock phone_number_widget %}
