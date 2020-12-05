@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony2 PhoneNumberBundle.
  *
@@ -50,12 +52,12 @@ class PhoneNumberType extends Type
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (null === $value) {
+        if (!(bool) $value) {
             return null;
         }
 
         if (!$value instanceof PhoneNumber) {
-            throw new ConversionException('Expected \libphonenumber\PhoneNumber, got '.\gettype($value));
+            throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', PhoneNumber::class]);
         }
 
         $util = PhoneNumberUtil::getInstance();
@@ -68,7 +70,11 @@ class PhoneNumberType extends Type
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if (null === $value || $value instanceof PhoneNumber) {
+        if (!(bool) $value) {
+            return null;
+        }
+
+        if ($value instanceof PhoneNumber) {
             return $value;
         }
 
