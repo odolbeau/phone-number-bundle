@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the Symfony2 PhoneNumberBundle.
  *
@@ -55,7 +53,7 @@ class PhoneNumberNormalizer implements NormalizerInterface, DenormalizerInterfac
      * @param string          $region          region code
      * @param int             $format          display format
      */
-    public function __construct(PhoneNumberUtil $phoneNumberUtil, $region = PhoneNumberUtil::UNKNOWN_REGION, $format = PhoneNumberFormat::INTERNATIONAL)
+    public function __construct(PhoneNumberUtil $phoneNumberUtil, $region = PhoneNumberUtil::UNKNOWN_REGION, $format = PhoneNumberFormat::E164)
     {
         $this->phoneNumberUtil = $phoneNumberUtil;
         $this->region = $region;
