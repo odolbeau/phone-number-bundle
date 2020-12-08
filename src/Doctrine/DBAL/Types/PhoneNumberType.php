@@ -55,7 +55,12 @@ class PhoneNumberType extends Type
         }
 
         if (!$value instanceof PhoneNumber) {
-            throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', PhoneNumber::class]);
+            // BC between "doctrine/doctrine-bundle": "^1.12" and "^2.0"
+            if (method_exists(ConversionException::class, 'conversionFailedInvalidType')) {
+                throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', PhoneNumber::class]);
+            } else {
+                throw new ConversionException(sprintf('Expected null or %s, got %s', PhoneNumber::class, \gettype($value));
+            }
         }
 
         $util = PhoneNumberUtil::getInstance();
