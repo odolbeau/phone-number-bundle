@@ -59,7 +59,7 @@ class PhoneNumberType extends Type
             if (method_exists(ConversionException::class, 'conversionFailedInvalidType')) {
                 throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', PhoneNumber::class]);
             } else {
-                throw new ConversionException(sprintf('Expected null or %s, got %s', PhoneNumber::class, \gettype($value));
+                throw new ConversionException(sprintf('Expected null or %s, got %s', PhoneNumber::class, \gettype($value)));
             }
         }
 
