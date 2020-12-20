@@ -59,6 +59,7 @@ class PhoneNumberNormalizerTest extends TestCase
         $normalizer = new PhoneNumberNormalizer($this->prophesize(PhoneNumberUtil::class)->reveal());
 
         $this->assertTrue($normalizer->supportsDenormalization('+33193166989', 'libphonenumber\PhoneNumber'));
+        $this->assertTrue($normalizer->supportsDenormalization(new PhoneNumber(), 'libphonenumber\PhoneNumber'));
         $this->assertFalse($normalizer->supportsDenormalization('+33193166989', 'stdClass'));
     }
 
@@ -73,6 +74,7 @@ class PhoneNumberNormalizerTest extends TestCase
         $normalizer = new PhoneNumberNormalizer($phoneNumberUtil->reveal());
 
         $this->assertSame($phoneNumber, $normalizer->denormalize('+33193166989', 'libphonenumber\PhoneNumber'));
+        $this->assertSame($phoneNumber, $normalizer->denormalize($phoneNumber, 'libphonenumber\PhoneNumber'));
     }
 
     public function testItDenormalizeNullToNull()
