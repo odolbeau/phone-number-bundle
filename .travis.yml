@@ -1,6 +1,7 @@
 language: php
 
-sudo: false
+git:
+  depth: 2
 
 php:
   - 7.2
@@ -13,23 +14,29 @@ cache:
     directories:
         - $HOME/.composer/cache/files
 
+env:
+    global:
+        - COMPOSER_FLAGS=""
+        - ENABLE_CODE_COVERAGE="no"
+        - SYMFONY_VERSION=""
+
 matrix:
     fast_failure: true
     include:
+        - php: 7.4
+          env: ENABLE_CODE_COVERAGE="yes"
         - php: 7.2
           env: COMPOSER_FLAGS="--prefer-lowest"
-        - php: 7.3
-          env: SYMFONY_VERSION=^4.3
         - php: 7.3
           env: SYMFONY_VERSION=^5.0
     allow_failures:
         - php: nightly
 
 before_install:
-  - phpenv config-rm xdebug.ini || true
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require --dev --no-update symfony/symfony:$SYMFONY_VERSION; fi
 
-install:
-  - composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
+before_script:
+  - composer update --prefer-dist --no-interaction --optimize-autoloader --no-progress $COMPOSER_FLAGS
 
-script: ./vendor/bin/phpunit --coverage-text
+script:
+  - if [[ "$ENABLE_CODE_COVERAGE" == "yes" ]]; then XDEBUG_MODE=coverage vendor/bin/phpunit -v --coverage-text --coverage-clover=coverage.clover; else vendor/bin/phpunit; fi;
