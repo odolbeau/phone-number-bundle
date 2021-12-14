@@ -27,6 +27,6 @@ class MisdPhoneNumberBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new FormTwi˚gTemplateCompilerPass());
+        $container->addCompilerPass(new FormTwigTemplateCompilerPass());
     }
 }
