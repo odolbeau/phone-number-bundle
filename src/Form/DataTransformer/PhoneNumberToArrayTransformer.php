@@ -39,7 +39,7 @@ class PhoneNumberToArrayTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      */
-    public function transform($phoneNumber)
+    public function transform($phoneNumber) : array
     {
         if (null === $phoneNumber) {
             return ['country' => '', 'number' => ''];
@@ -62,7 +62,7 @@ class PhoneNumberToArrayTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      */
-    public function reverseTransform($value)
+    public function reverseTransform($value) : null|PhoneNumber
     {
         if (!$value) {
             return null;
