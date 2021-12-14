@@ -27,7 +27,7 @@ class FormTwigTemplateCompilerPass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (false === $container->hasParameter('twig.form.resources')) {
             return;
