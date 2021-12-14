@@ -44,7 +44,7 @@ class PhoneNumberHelperExtension extends AbstractExtension
      *
      * @return array
      */
-    public function getFunctions(): array
+    public function getFunctions()
     {
         return [
             // Deprecated in favor of the phone_number_format filter
@@ -58,7 +58,7 @@ class PhoneNumberHelperExtension extends AbstractExtension
      *
      * @return array
      */
-    public function getFilters(): array
+    public function getFilters()
     {
         return [
             new TwigFilter('phone_number_format', [$this->helper, 'format']),
@@ -71,7 +71,7 @@ class PhoneNumberHelperExtension extends AbstractExtension
      *
      * @return array
      */
-    public function getTests(): array
+    public function getTests()
     {
         return [
             new TwigTest('phone_number_of_type', [$this->helper, 'isType']),
@@ -80,8 +80,9 @@ class PhoneNumberHelperExtension extends AbstractExtension
 
     /**
      * {@inheritdoc}
+     * @return string
      */
-    public function getName(): string
+    public function getName()
     {
         return 'phone_number_helper';
     }

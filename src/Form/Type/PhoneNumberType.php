@@ -145,16 +145,18 @@ class PhoneNumberType extends AbstractType
 
     /**
      * {@inheritdoc}
+     * @return string
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->getBlockPrefix();
     }
 
     /**
      * {@inheritdoc}
+     * @return string
      */
-    public function getBlockPrefix(): string
+    public function getBlockPrefix()
     {
         return 'phone_number';
     }
