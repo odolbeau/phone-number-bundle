@@ -89,7 +89,7 @@ class PhoneNumberNormalizer implements NormalizerInterface, DenormalizerInterfac
     public function denormalize($data, $class, $format = null, array $context = [])
     {
         if (null === $data) {
-            return null;
+            return;
         }
 
         try {
