@@ -53,6 +53,7 @@ class PhoneNumberToStringTransformer implements DataTransformerInterface
 
     /**
      * {@inheritdoc}
+     *
      * @return string
      */
     public function transform($phoneNumber)
@@ -74,7 +75,8 @@ class PhoneNumberToStringTransformer implements DataTransformerInterface
 
     /**
      * {@inheritdoc}
-     * @return null|PhoneNumber
+     *
+     * @return ?PhoneNumber
      */
     public function reverseTransform($string)
     {

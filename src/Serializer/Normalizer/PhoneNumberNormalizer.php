@@ -64,6 +64,7 @@ class PhoneNumberNormalizer implements NormalizerInterface, DenormalizerInterfac
      * {@inheritdoc}
      *
      * @throws InvalidArgumentException
+     *
      * @return array|string|int|float|bool|\ArrayObject|null
      */
     public function normalize($object, $format = null, array $context = [])
@@ -73,7 +74,6 @@ class PhoneNumberNormalizer implements NormalizerInterface, DenormalizerInterfac
 
     /**
      * {@inheritdoc}
-     * @return bool
      */
     public function supportsNormalization($data, $format = null): bool
     {
@@ -84,6 +84,7 @@ class PhoneNumberNormalizer implements NormalizerInterface, DenormalizerInterfac
      * {@inheritdoc}
      *
      * @throws UnexpectedValueException
+     *
      * @return mixed
      */
     public function denormalize($data, $class, $format = null, array $context = [])
@@ -101,6 +102,7 @@ class PhoneNumberNormalizer implements NormalizerInterface, DenormalizerInterfac
 
     /**
      * {@inheritdoc}
+     *
      * @return bool
      */
     public function supportsDenormalization($data, $type, $format = null)
