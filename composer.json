@@ -12,12 +12,13 @@
         "sort-packages": true
     },
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.0",
         "giggsey/libphonenumber-for-php": "^8.0",
         "symfony/framework-bundle": "^4.4|^5.3|^6.0",
         "symfony/intl": "^4.4|^5.3|^6.0"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-latest",
         "doctrine/doctrine-bundle": "^1.12|^2.0",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^9.5",

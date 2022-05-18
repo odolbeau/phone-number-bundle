@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /*
  * This file is part of the Symfony2 PhoneNumberBundle.
@@ -18,6 +19,7 @@ use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
+use function gettype;
 
 /**
  * Phone number Doctrine mapping type.
@@ -34,7 +36,7 @@ class PhoneNumberType extends Type
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return self::NAME;
     }
@@ -44,7 +46,7 @@ class PhoneNumberType extends Type
      *
      * @return mixed
      */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getVarcharTypeDeclarationSQL(['length' => 35]);
     }
@@ -52,29 +54,27 @@ class PhoneNumberType extends Type
     /**
      * {@inheritdoc}
      *
-     * @return mixed
+     * @return string|null
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         if (null === $value) {
             return null;
         }
 
         if (!$value instanceof PhoneNumber) {
-            throw new ConversionException('Expected \libphonenumber\PhoneNumber, got '.\gettype($value));
+            throw new ConversionException('Expected \libphonenumber\PhoneNumber, got '. gettype($value));
         }
 
-        $util = PhoneNumberUtil::getInstance();
-
-        return $util->format($value, PhoneNumberFormat::E164);
+        return PhoneNumberUtil::getInstance()->format($value, PhoneNumberFormat::E164);
     }
 
     /**
      * {@inheritdoc}
      *
-     * @return mixed
+     * @return PhoneNumber|null
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?PhoneNumber
     {
         if (null === $value || $value instanceof PhoneNumber) {
             return $value;
@@ -84,7 +84,7 @@ class PhoneNumberType extends Type
 
         try {
             return $util->parse($value, PhoneNumberUtil::UNKNOWN_REGION);
-        } catch (NumberParseException $e) {
+        } catch (NumberParseException) {
             throw ConversionException::conversionFailed($value, self::NAME);
         }
     }
@@ -94,7 +94,7 @@ class PhoneNumberType extends Type
      *
      * @return bool
      */
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }
