@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Remove support of symfony < 5.4 (5.4 is new LTS)
+
 ## [3.9.1] - 2023-01-16
 
 ### Fixed
