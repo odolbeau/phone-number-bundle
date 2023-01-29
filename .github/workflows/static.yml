@@ -17,6 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: PHP-CS-Fixer
-        uses: docker://jakzal/phpqa:php8.2
+        uses: docker://jakzal/phpqa:php8.0
+        # TODO change to php 8.2, after PHP-CS-Fixer support is implemented
         with:
           args: php-cs-fixer fix --config=.php_cs.dist.php --dry-run

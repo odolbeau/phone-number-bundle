@@ -9,3 +9,4 @@ parameters:
             message: "#^Attribute class Symfony\\\\Component\\\\Validator\\\\Attribute\\\\HasNamedArguments does not exist\\.$#"
             count: 1
             path: src/Validator/Constraints/PhoneNumber.php
+            reportUnmatched: false
