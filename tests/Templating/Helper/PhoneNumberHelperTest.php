@@ -11,6 +11,7 @@
 
 namespace Misd\PhoneNumberBundle\Tests\Templating\Helper;
 
+use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
@@ -79,6 +80,32 @@ class PhoneNumberHelperTest extends TestCase
         $phoneNumber = $phoneNumberUtil->parse($phoneNumber, $defaultRegion);
 
         $this->assertSame($expectedResult, $helper->formatOutOfCountryCallingNumber($phoneNumber, $regionCode));
+    }
+
+    public function testFormatAcceptString()
+    {
+        $phoneNumberUtil = PhoneNumberUtil::getInstance();
+        $helper = new PhoneNumberHelper($phoneNumberUtil);
+        $result = $helper->format('+37122222222');
+        $this->assertEquals( '+371 22 222 222', $result);
+    }
+
+    public function testFormatAcceptNotAllowValue()
+    {
+        $phoneNumberUtil = PhoneNumberUtil::getInstance();
+        $helper = new PhoneNumberHelper($phoneNumberUtil);
+        $this->expectException(NumberParseException::class);
+        $this->expectExceptionCode(\libphonenumber\NumberParseException::NOT_A_NUMBER);
+        $this->expectExceptionMessage('The phone number supplied is not PhoneNumber or string.');
+        $helper->format(0037122222222);
+    }
+
+    public function formatOutOfCountryCallingNumberAcceptString()
+    {
+        $phoneNumberUtil = PhoneNumberUtil::getInstance();
+        $helper = new PhoneNumberHelper($phoneNumberUtil);
+        $result = $helper->formatOutOfCountryCallingNumber('+37122222222', 'LV');
+        $this->assertEquals( '+371 22 222 222', $result);
     }
 
     /**
