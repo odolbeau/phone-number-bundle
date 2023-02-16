@@ -44,7 +44,7 @@ class PhoneNumberHelper
      * Format a phone number.
      *
      * @param PhoneNumber|string $phoneNumber phone number
-     * @param int|string  $format      format, or format constant name
+     * @param int|string         $format      format, or format constant name
      *
      * @return string formatted phone number
      *
@@ -71,7 +71,7 @@ class PhoneNumberHelper
      * Formats this phone number for out-of-country dialing purposes.
      *
      * @param PhoneNumber|string $phoneNumber phone number
-     * @param string|null $regionCode  The ISO 3166-1 alpha-2 country code
+     * @param string|null        $regionCode  The ISO 3166-1 alpha-2 country code
      */
     public function formatOutOfCountryCallingNumber($phoneNumber, $regionCode): string
     {
@@ -82,7 +82,7 @@ class PhoneNumberHelper
 
     /**
      * @param PhoneNumber|string $phoneNumber phone number
-     * @param int|string  $type        phoneNumberType, or PhoneNumberType constant name
+     * @param int|string         $type        phoneNumberType, or PhoneNumberType constant name
      *
      * @throws InvalidArgumentException if type argument is invalid
      */
@@ -105,20 +105,19 @@ class PhoneNumberHelper
 
     /**
      * @param PhoneNumber|string $phoneNumber
+     *
      * @return PhoneNumber|void
+     *
      * @throws \libphonenumber\NumberParseException
      */
     private function getPhoneNumber($phoneNumber)
     {
-        if (is_string($phoneNumber)) {
+        if (\is_string($phoneNumber)) {
             $phoneNumber = $this->phoneNumberUtil->parse($phoneNumber);
         }
 
         if (!$phoneNumber instanceof PhoneNumber) {
-            throw new NumberParseException(
-                NumberParseException::NOT_A_NUMBER,
-                'The phone number supplied is not PhoneNumber or string.'
-            );
+            throw new InvalidArgumentException('The phone number supplied is not PhoneNumber or string.');
         }
 
         return $phoneNumber;
