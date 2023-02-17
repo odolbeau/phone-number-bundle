@@ -11,7 +11,6 @@
 
 namespace Misd\PhoneNumberBundle\Templating\Helper;
 
-use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberType;
