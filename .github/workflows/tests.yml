@@ -13,8 +13,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - php: '7.4'
-            symfony-require: 4.4.*
           - php: '8.0'
             symfony-require: 5.3.*
           - php: '8.0'
