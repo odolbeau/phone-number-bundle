@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * This file is part of the Symfony2 PhoneNumberBundle.
+ * This file is part of the Symfony PhoneNumberBundle.
  *
  * (c) University of Cambridge
  *
@@ -19,6 +21,7 @@ use libphonenumber\PhoneNumberUtil;
 use Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * Phone number type test.
@@ -27,20 +30,9 @@ class PhoneNumberTypeTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var AbstractPlatform
-     */
-    protected $platform;
-
-    /**
-     * @var PhoneNumberType
-     */
-    protected $type;
-
-    /**
-     * @var PhoneNumberUtil
-     */
-    protected $phoneNumberUtil;
+    protected AbstractPlatform|ObjectProphecy $platform;
+    protected PhoneNumberType|Type $type;
+    protected PhoneNumberUtil $phoneNumberUtil;
 
     public static function setUpBeforeClass(): void
     {

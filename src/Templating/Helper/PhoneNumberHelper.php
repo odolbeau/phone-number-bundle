@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * This file is part of the Symfony2 PhoneNumberBundle.
+ * This file is part of the Symfony PhoneNumberBundle.
  *
  * (c) University of Cambridge
  *
@@ -39,17 +41,7 @@ class PhoneNumberHelper
         $this->phoneNumberUtil = $phoneNumberUtil;
     }
 
-    /**
-     * Format a phone number.
-     *
-     * @param PhoneNumber|string $phoneNumber phone number
-     * @param int|string         $format      format, or format constant name
-     *
-     * @return string formatted phone number
-     *
-     * @throws InvalidArgumentException if an argument is invalid
-     */
-    public function format($phoneNumber, $format = PhoneNumberFormat::INTERNATIONAL): string
+    public function format(PhoneNumber|string $phoneNumber, string|int $format = PhoneNumberFormat::INTERNATIONAL): string
     {
         $phoneNumber = $this->getPhoneNumber($phoneNumber);
 
@@ -102,14 +94,7 @@ class PhoneNumberHelper
         return $this->phoneNumberUtil->getNumberType($phoneNumber) === $type;
     }
 
-    /**
-     * @param PhoneNumber|string $phoneNumber
-     *
-     * @return PhoneNumber|void
-     *
-     * @throws \libphonenumber\NumberParseException
-     */
-    private function getPhoneNumber($phoneNumber)
+    private function getPhoneNumber(PhoneNumber|string $phoneNumber): PhoneNumber
     {
         if (\is_string($phoneNumber)) {
             $phoneNumber = $this->phoneNumberUtil->parse($phoneNumber);

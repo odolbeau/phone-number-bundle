@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * This file is part of the Symfony2 PhoneNumberBundle.
+ * This file is part of the Symfony PhoneNumberBundle.
  *
  * (c) University of Cambridge
  *
@@ -58,7 +60,9 @@ class PhoneNumberToStringTransformer implements DataTransformerInterface
     {
         if (null === $phoneNumber) {
             return '';
-        } elseif (false === $phoneNumber instanceof PhoneNumber) {
+        }
+
+        if (false === $phoneNumber instanceof PhoneNumber) {
             throw new TransformationFailedException('Expected a \libphonenumber\PhoneNumber.');
         }
 

@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * This file is part of the Symfony2 PhoneNumberBundle.
+ * This file is part of the Symfony PhoneNumberBundle.
  *
  * (c) University of Cambridge
  *
@@ -43,7 +45,9 @@ class PhoneNumberToArrayTransformer implements DataTransformerInterface
     {
         if (null === $phoneNumber) {
             return ['country' => '', 'number' => ''];
-        } elseif (false === $phoneNumber instanceof PhoneNumber) {
+        }
+
+        if (false === $phoneNumber instanceof PhoneNumber) {
             throw new TransformationFailedException('Expected a \libphonenumber\PhoneNumber.');
         }
 
@@ -84,7 +88,7 @@ class PhoneNumberToArrayTransformer implements DataTransformerInterface
             throw new TransformationFailedException($e->getMessage(), $e->getCode(), $e);
         }
 
-        if (false === \in_array($util->getRegionCodeForNumber($phoneNumber), $this->countryChoices)) {
+        if ($phoneNumber !== null && false === \in_array($util->getRegionCodeForNumber($phoneNumber), $this->countryChoices)) {
             throw new TransformationFailedException('Invalid country.');
         }
 

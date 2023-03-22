@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * This file is part of the Symfony2 PhoneNumberBundle.
+ * This file is part of the Symfony PhoneNumberBundle.
  *
  * (c) University of Cambridge
  *
@@ -18,6 +20,7 @@ use Misd\PhoneNumberBundle\Exception\InvalidArgumentException;
 use Misd\PhoneNumberBundle\Templating\Helper\PhoneNumberHelper;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * Phone number templating helper test.
@@ -26,8 +29,8 @@ class PhoneNumberHelperTest extends TestCase
 {
     use ProphecyTrait;
 
-    protected $phoneNumberUtil;
-    protected $helper;
+    protected PhoneNumberUtil|ObjectProphecy $phoneNumberUtil;
+    protected PhoneNumberHelper $helper;
 
     protected function setUp(): void
     {
@@ -38,7 +41,7 @@ class PhoneNumberHelperTest extends TestCase
     /**
      * @dataProvider processProvider
      */
-    public function testProcess($format, $expectedFormat)
+    public function testProcess($format, $expectedFormat): void
     {
         $phoneNumber = $this->prophesize(PhoneNumber::class);
         $this->phoneNumberUtil
@@ -53,13 +56,13 @@ class PhoneNumberHelperTest extends TestCase
      * 0 => Format
      * 1 => Expected format.
      */
-    public function processProvider()
+    public function processProvider(): \Generator
     {
         yield [PhoneNumberFormat::NATIONAL, PhoneNumberFormat::NATIONAL];
         yield ['NATIONAL', PhoneNumberFormat::NATIONAL];
     }
 
-    public function testProcessInvalidArgumentException()
+    public function testProcessInvalidArgumentException(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -71,7 +74,7 @@ class PhoneNumberHelperTest extends TestCase
     /**
      * @dataProvider formatOutOfCountryCallingNumberProvider
      */
-    public function testFormatOutOfCountryCallingNumber($phoneNumber, $defaultRegion, $regionCode, $expectedResult)
+    public function testFormatOutOfCountryCallingNumber($phoneNumber, $defaultRegion, $regionCode, $expectedResult): void
     {
         $phoneNumberUtil = PhoneNumberUtil::getInstance();
         $helper = new PhoneNumberHelper($phoneNumberUtil);
@@ -81,7 +84,7 @@ class PhoneNumberHelperTest extends TestCase
         $this->assertSame($expectedResult, $helper->formatOutOfCountryCallingNumber($phoneNumber, $regionCode));
     }
 
-    public function testFormatAcceptString()
+    public function testFormatAcceptString(): void
     {
         $phoneNumberUtil = PhoneNumberUtil::getInstance();
         $helper = new PhoneNumberHelper($phoneNumberUtil);
@@ -89,16 +92,7 @@ class PhoneNumberHelperTest extends TestCase
         $this->assertEquals('+371 22 222 222', $result);
     }
 
-    public function testFormatAcceptNotAllowValue()
-    {
-        $phoneNumberUtil = PhoneNumberUtil::getInstance();
-        $helper = new PhoneNumberHelper($phoneNumberUtil);
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The phone number supplied is not PhoneNumber or string.');
-        $helper->format(0037122222222);
-    }
-
-    public function formatOutOfCountryCallingNumberAcceptString()
+    public function formatOutOfCountryCallingNumberAcceptString(): void
     {
         $phoneNumberUtil = PhoneNumberUtil::getInstance();
         $helper = new PhoneNumberHelper($phoneNumberUtil);
@@ -112,7 +106,7 @@ class PhoneNumberHelperTest extends TestCase
      * 2 => Country calling from.
      * 3 => Expected format.
      */
-    public function formatOutOfCountryCallingNumberProvider()
+    public function formatOutOfCountryCallingNumberProvider(): \Generator
     {
         yield ['1-800-854-3680', 'US', 'US', '1 (800) 854-3680'];
         yield ['1-800-854-3680', 'US', 'NL', '00 1 800-854-3680'];

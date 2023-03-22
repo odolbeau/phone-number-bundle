@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * This file is part of the Symfony2 PhoneNumberBundle.
+ * This file is part of the Symfony PhoneNumberBundle.
  *
  * (c) University of Cambridge
  *
@@ -70,7 +72,12 @@ class PhoneNumberType extends AbstractType
                     continue;
                 }
 
-                $label = $this->formatDisplayChoice($options['country_display_type'], $intlCountries[$regionCode], $regionCode, $countryCode);
+                $label = $this->formatDisplayChoice(
+                    $options['country_display_type'],
+                    $intlCountries[$regionCode],
+                    $regionCode,
+                    $countryCode
+                );
                 $countryChoices[$label] = $regionCode;
             }
 
@@ -170,7 +177,7 @@ class PhoneNumberType extends AbstractType
         return 'phone_number';
     }
 
-    private function formatDisplayChoice(string $displayType, string $regionName, string $regionCode, string $countryCode): string
+    private function formatDisplayChoice(string $displayType, string $regionName, string $regionCode, int $countryCode): string
     {
         if (self::DISPLAY_COUNTRY_SHORT === $displayType) {
             return sprintf('%s +%s', $regionCode, $countryCode);

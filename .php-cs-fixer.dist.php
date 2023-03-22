@@ -13,6 +13,7 @@ return $config
     ->setRules([
         '@Symfony' => true,
         '@Symfony:risky' => true,
+        'declare_strict_types' => true,
         'array_syntax' => ['syntax' => 'short'],
     ])
     ->setFinder($finder)

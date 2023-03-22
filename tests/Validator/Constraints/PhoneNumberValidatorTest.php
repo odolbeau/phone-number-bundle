@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * This file is part of the Symfony2 PhoneNumberBundle.
+ * This file is part of the Symfony PhoneNumberBundle.
  *
  * (c) University of Cambridge
  *
@@ -83,10 +85,7 @@ class PhoneNumberValidatorTest extends TestCase
         $this->validator->validate($value, $constraint);
     }
 
-    /**
-     * @requires PHP 8
-     */
-    public function testValidateFromAttribute()
+    public function testValidateFromAttribute(): void
     {
         $classMetadata = new ClassMetadata(PhoneNumberDummy::class);
         (new AnnotationLoader())->loadClassMetadata($classMetadata);
@@ -177,10 +176,10 @@ class Foo
 class PhoneNumberDummy
 {
     #[PhoneNumber(type: [PhoneNumber::MOBILE], defaultRegion: 'FR')]
-    private $phoneNumber1;
+    public $phoneNumber1;
 
     #[PhoneNumber(regionPath: 'regionPath')]
-    private $phoneNumber2;
+    public $phoneNumber2;
 
     public $regionPath = 'GB';
 }

@@ -5,3 +5,4 @@
 /composer.phar
 /phpunit.xml
 /vendor/
+/.php-cs-fixer.cache

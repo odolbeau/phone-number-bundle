@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * This file is part of the Symfony2 PhoneNumberBundle.
+ * This file is part of the Symfony PhoneNumberBundle.
  *
  * (c) University of Cambridge
  *
@@ -62,6 +64,10 @@ class PhoneNumberValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint): void
     {
+        if (!$constraint instanceof PhoneNumber) {
+            return;
+        }
+
         if (null === $value || '' === $value) {
             return;
         }
@@ -140,7 +146,7 @@ class PhoneNumberValidator extends ConstraintValidator
         }
     }
 
-    private function getRegion(Constraint $constraint): ?string
+    private function getRegion(PhoneNumber $constraint): ?string
     {
         $defaultRegion = null;
         if (null !== $path = $constraint->regionPath) {
@@ -176,13 +182,7 @@ class PhoneNumberValidator extends ConstraintValidator
         return $this->propertyAccessor;
     }
 
-    /**
-     * Add a violation.
-     *
-     * @param mixed      $value      the value that should be validated
-     * @param Constraint $constraint the constraint for the validation
-     */
-    private function addViolation($value, Constraint $constraint): void
+    private function addViolation(mixed $value, PhoneNumber $constraint): void
     {
         $this->context->buildViolation($constraint->getMessage())
             ->setParameter('{{ types }}', implode(', ', $constraint->getTypeNames()))

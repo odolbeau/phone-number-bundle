@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * This file is part of the Symfony2 PhoneNumberBundle.
+ * This file is part of the Symfony PhoneNumberBundle.
  *
  * (c) University of Cambridge
  *
@@ -11,6 +13,7 @@
 
 namespace Misd\PhoneNumberBundle\Validator\Constraints;
 
+use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
 use Misd\PhoneNumberBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Validator\Attribute\HasNamedArguments;
 use Symfony\Component\Validator\Constraint;

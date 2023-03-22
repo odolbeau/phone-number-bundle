@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * This file is part of the Symfony2 PhoneNumberBundle.
+ * This file is part of the Symfony PhoneNumberBundle.
  *
  * (c) University of Cambridge
  *
@@ -49,9 +51,9 @@ class PhoneNumberTypeTest extends TestCase
 
         if (method_exists($form, 'getTransformationFailure') && $failure = $form->getTransformationFailure()) {
             throw $failure;
-        } else {
-            $this->assertTrue($form->isSynchronized());
         }
+
+        $this->assertTrue($form->isSynchronized());
 
         $view = $form->createView();
 
@@ -88,9 +90,9 @@ class PhoneNumberTypeTest extends TestCase
 
         if (method_exists($form, 'getTransformationFailure') && $failure = $form->getTransformationFailure()) {
             throw $failure;
-        } else {
-            $this->assertTrue($form->isSynchronized());
         }
+
+        $this->assertTrue($form->isSynchronized());
 
         $view = $form->createView();
 

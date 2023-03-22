@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * This file is part of the Symfony2 PhoneNumberBundle.
+ * This file is part of the Symfony PhoneNumberBundle.
  *
  * (c) University of Cambridge
  *
@@ -58,9 +60,7 @@ class PhoneNumberType extends Type
             throw new ConversionException('Expected \libphonenumber\PhoneNumber, got '.\gettype($value));
         }
 
-        $util = PhoneNumberUtil::getInstance();
-
-        return $util->format($value, PhoneNumberFormat::E164);
+        return PhoneNumberUtil::getInstance()->format($value, PhoneNumberFormat::E164);
     }
 
     /**
