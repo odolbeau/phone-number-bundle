@@ -1,7 +1,6 @@
 name: PHPUnit
 
 on:
-  push:
   pull_request:
 
 jobs:
@@ -11,17 +10,25 @@ jobs:
     runs-on: Ubuntu-20.04
 
     strategy:
+      fail-fast: false
       matrix:
         include:
-          - php: '7.4'
-            symfony-require: 4.4.*
-          - php: '8.0'
-            symfony-require: 5.3.*
-          - php: '8.0'
-            symfony-require: 6.0.*
+          # Lowest Deps
+          - php: 8.1
+            symfony-require: 5.4.*
+          # LTS with latest (supported) stable PHP
+          - php: 8.2
+            symfony-require: 5.4.*
+          # Active release
+          - php: latest
+            symfony-require: 6.3.*
+          - php: latest
+            symfony-require: 7.0.*
+          # Development release
+          - php: nightly
+            symfony-require: 7.0.*@dev
             stability: dev
-          - php: '8.1'
-      fail-fast: false
+            continue-on-error: true
 
     steps:
       - name: Checkout
