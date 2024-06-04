@@ -59,8 +59,16 @@ class PhoneNumber extends Constraint
      * @param array<mixed>         $options
      */
     #[HasNamedArguments]
-    public function __construct(int $format = null, string|array $type = null, string $defaultRegion = null, string $regionPath = null, string $message = null, array $groups = null, $payload = null, array $options = [])
-    {
+    public function __construct(
+        ?int $format = null,
+        string|array|null $type = null,
+        ?string $defaultRegion = null,
+        ?string $regionPath = null,
+        ?string $message = null,
+        ?array $groups = null,
+        $payload = null,
+        array $options = []
+    ) {
         parent::__construct($options, $groups, $payload);
 
         $this->message = $message ?? $this->message;
