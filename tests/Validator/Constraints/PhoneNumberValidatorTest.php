@@ -53,10 +53,10 @@ class PhoneNumberValidatorTest extends TestCase
     public function testValidate(
         string|LibPhoneNumber|null $value,
         bool $violates,
-        array|string $type = null,
-        string $defaultRegion = null,
-        string $regionPath = null,
-        int $format = null
+        array|string|null $type = null,
+        ?string $defaultRegion = null,
+        ?string $regionPath = null,
+        ?int $format = null
     ): void {
         $constraint = new PhoneNumber($format, $type, $defaultRegion, $regionPath);
 

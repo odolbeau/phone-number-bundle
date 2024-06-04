@@ -38,8 +38,11 @@ class PhoneNumberValidator extends ConstraintValidator
     private ?PropertyAccessorInterface $propertyAccessor = null;
     private int $format;
 
-    public function __construct(PhoneNumberUtil $phoneUtil = null, string $defaultRegion = PhoneNumberUtil::UNKNOWN_REGION, int $format = PhoneNumberFormat::INTERNATIONAL)
-    {
+    public function __construct(
+        ?PhoneNumberUtil $phoneUtil = null,
+        string $defaultRegion = PhoneNumberUtil::UNKNOWN_REGION,
+        int $format = PhoneNumberFormat::INTERNATIONAL
+    ) {
         $this->phoneUtil = $phoneUtil ?? PhoneNumberUtil::getInstance();
         $this->defaultRegion = $defaultRegion;
         $this->format = $format;
@@ -83,36 +86,36 @@ class PhoneNumberValidator extends ConstraintValidator
         $validTypes = [];
         foreach ($constraint->getTypes() as $type) {
             switch ($type) {
-                case PhoneNumber::FIXED_LINE:
+                case PhoneNumberConstraint::FIXED_LINE:
                     $validTypes[] = PhoneNumberType::FIXED_LINE;
                     $validTypes[] = PhoneNumberType::FIXED_LINE_OR_MOBILE;
                     break;
-                case PhoneNumber::MOBILE:
+                case PhoneNumberConstraint::MOBILE:
                     $validTypes[] = PhoneNumberType::MOBILE;
                     $validTypes[] = PhoneNumberType::FIXED_LINE_OR_MOBILE;
                     break;
-                case PhoneNumber::PAGER:
+                case PhoneNumberConstraint::PAGER:
                     $validTypes[] = PhoneNumberType::PAGER;
                     break;
-                case PhoneNumber::PERSONAL_NUMBER:
+                case PhoneNumberConstraint::PERSONAL_NUMBER:
                     $validTypes[] = PhoneNumberType::PERSONAL_NUMBER;
                     break;
-                case PhoneNumber::PREMIUM_RATE:
+                case PhoneNumberConstraint::PREMIUM_RATE:
                     $validTypes[] = PhoneNumberType::PREMIUM_RATE;
                     break;
-                case PhoneNumber::SHARED_COST:
+                case PhoneNumberConstraint::SHARED_COST:
                     $validTypes[] = PhoneNumberType::SHARED_COST;
                     break;
-                case PhoneNumber::TOLL_FREE:
+                case PhoneNumberConstraint::TOLL_FREE:
                     $validTypes[] = PhoneNumberType::TOLL_FREE;
                     break;
-                case PhoneNumber::UAN:
+                case PhoneNumberConstraint::UAN:
                     $validTypes[] = PhoneNumberType::UAN;
                     break;
-                case PhoneNumber::VOIP:
+                case PhoneNumberConstraint::VOIP:
                     $validTypes[] = PhoneNumberType::VOIP;
                     break;
-                case PhoneNumber::VOICEMAIL:
+                case PhoneNumberConstraint::VOICEMAIL:
                     $validTypes[] = PhoneNumberType::VOICEMAIL;
                     break;
             }
@@ -176,7 +179,7 @@ class PhoneNumberValidator extends ConstraintValidator
         $this->context->buildViolation($constraint->getMessage())
             ->setParameter('{{ types }}', implode(', ', $constraint->getTypeNames()))
             ->setParameter('{{ value }}', $this->formatValue($value))
-            ->setCode(PhoneNumber::INVALID_PHONE_NUMBER_ERROR)
+            ->setCode(PhoneNumberConstraint::INVALID_PHONE_NUMBER_ERROR)
             ->addViolation();
     }
 }

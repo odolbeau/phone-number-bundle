@@ -48,7 +48,7 @@ class PhoneNumberNormalizer implements NormalizerInterface, DenormalizerInterfac
      *
      * @throws InvalidArgumentException
      */
-    public function normalize(mixed $object, string $format = null, array $context = []): string
+    public function normalize(mixed $object, ?string $format = null, array $context = []): string
     {
         return $this->phoneNumberUtil->format($object, $this->format);
     }
@@ -56,7 +56,7 @@ class PhoneNumberNormalizer implements NormalizerInterface, DenormalizerInterfac
     /**
      * @param array<mixed> $context
      */
-    public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
+    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
         return $data instanceof PhoneNumber;
     }
@@ -66,7 +66,7 @@ class PhoneNumberNormalizer implements NormalizerInterface, DenormalizerInterfac
      *
      * @throws UnexpectedValueException
      */
-    public function denormalize(mixed $data, string $type, string $format = null, array $context = []): ?PhoneNumber
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): ?PhoneNumber
     {
         if (null === $data) {
             return null;
@@ -82,7 +82,7 @@ class PhoneNumberNormalizer implements NormalizerInterface, DenormalizerInterfac
     /**
      * @param array<mixed> $context
      */
-    public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
         return PhoneNumber::class === $type && \is_string($data);
     }
