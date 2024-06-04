@@ -41,6 +41,7 @@ class PhoneNumberType extends Type
     {
         // DBAL < 4
         if (method_exists(AbstractPlatform::class, 'getVarcharTypeDeclarationSQL')) {
+            // @phpstan-ignore-next-line
             return $platform->getVarcharTypeDeclarationSQL(['length' => $column['length'] ?? 35]);
         }
 
@@ -78,7 +79,6 @@ class PhoneNumberType extends Type
             }
 
             // DBAL 4
-            // @phpstan-ignore-next-line
             throw InvalidType::new($value, self::NAME, ['null', 'string']);
         }
     }
