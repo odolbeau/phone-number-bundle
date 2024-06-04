@@ -132,7 +132,7 @@ class PhoneNumberValidator extends ConstraintValidator
         }
     }
 
-    private function getRegion(PhoneNumberConstraint $constraint): ?string
+    private function getRegion(PhoneNumberConstraint $constraint): string
     {
         $defaultRegion = null;
         if (null !== $path = $constraint->regionPath) {

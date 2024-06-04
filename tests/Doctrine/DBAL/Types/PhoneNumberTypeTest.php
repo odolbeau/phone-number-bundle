@@ -34,7 +34,7 @@ class PhoneNumberTypeTest extends TestCase
      * @var ObjectProphecy<AbstractPlatform>
      */
     private ObjectProphecy $platform;
-    private Type $type;
+    private PhoneNumberType $type;
     private PhoneNumberUtil $phoneNumberUtil;
 
     public static function setUpBeforeClass(): void
@@ -53,7 +53,10 @@ class PhoneNumberTypeTest extends TestCase
             $this->platform->getStringTypeDeclarationSQL()->willReturn('DUMMYVARCHAR()');
         }
 
-        $this->type = Type::getType('phone_number');
+        /** @var PhoneNumberType $type */
+        $type = Type::getType('phone_number');
+
+        $this->type = $type;
         $this->phoneNumberUtil = PhoneNumberUtil::getInstance();
     }
 
