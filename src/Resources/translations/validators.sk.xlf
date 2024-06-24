@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>This value is not a valid phone number.</source>
+                <target>Táto hodnota nie je platné telefónne číslo.</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>This value is not a valid fixed-line number.</source>
+                <target>Táto hodnota nie je platným číslom pevnej linky.</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>This value is not a valid mobile number.</source>
+                <target>Táto hodnota nie je platné mobilné telefónne číslo.</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>This value is not a valid pager number.</source>
+                <target>Táto hodnota nie je platným číslom pagera.</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>This value is not a valid personal number.</source>
+                <target>Táto hodnota nie je platným osobným číslom.</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>This value is not a valid premium-rate number.</source>
+                <target>Táto hodnota nie je platným číslom prémiovej sadzby.</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>This value is not a valid shared-cost number.</source>
+                <target>Táto hodnota nie je platným číslom so zdieľanými nákladmi.</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>This value is not a valid toll-free number.</source>
+                <target>Táto hodnota nie je platným bezplatným číslom.</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>This value is not a valid UAN.</source>
+                <target>Táto hodnota nie je platným UAN.</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>This value is not a valid VoIP number.</source>
+                <target>Táto hodnota nie je platným číslom VoIP.</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>This value is not a valid voicemail access number.</source>
+                <target>Táto hodnota nie je platným prístupovým číslom hlasovej schránky.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
