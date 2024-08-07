@@ -170,9 +170,9 @@ class PhoneNumberType extends AbstractType
 
     private function formatDisplayChoice(string $displayType, string $regionName, string $regionCode, string $countryCode, bool $displayEmojiFlag): string
     {
-        $formattedDisplay = sprintf('%s (+%s)', $regionName, $countryCode);
+        $formattedDisplay = \sprintf('%s (+%s)', $regionName, $countryCode);
         if (self::DISPLAY_COUNTRY_SHORT === $displayType) {
-            $formattedDisplay = sprintf('%s +%s', $regionCode, $countryCode);
+            $formattedDisplay = \sprintf('%s +%s', $regionCode, $countryCode);
         }
 
         if ($displayEmojiFlag) {
