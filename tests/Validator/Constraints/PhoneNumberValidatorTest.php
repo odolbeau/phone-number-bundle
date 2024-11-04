@@ -56,7 +56,7 @@ class PhoneNumberValidatorTest extends TestCase
         array|string|null $type = null,
         ?string $defaultRegion = null,
         ?string $regionPath = null,
-        ?int $format = null
+        ?int $format = null,
     ): void {
         $constraint = new PhoneNumber($format, $type, $defaultRegion, $regionPath);
 
