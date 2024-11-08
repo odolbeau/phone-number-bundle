@@ -67,7 +67,7 @@ class PhoneNumber extends Constraint
         ?string $message = null,
         ?array $groups = null,
         $payload = null,
-        array $options = []
+        array $options = [],
     ) {
         parent::__construct($options, $groups, $payload);
 

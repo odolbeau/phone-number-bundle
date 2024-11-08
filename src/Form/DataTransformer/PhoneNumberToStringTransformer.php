@@ -30,7 +30,7 @@ class PhoneNumberToStringTransformer implements DataTransformerInterface
 
     public function __construct(
         string $defaultRegion = PhoneNumberUtil::UNKNOWN_REGION,
-        int $format = PhoneNumberFormat::INTERNATIONAL
+        int $format = PhoneNumberFormat::INTERNATIONAL,
     ) {
         $this->defaultRegion = $defaultRegion;
         $this->format = $format;
