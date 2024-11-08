@@ -51,6 +51,10 @@ class PhoneNumberToArrayTransformer implements DataTransformerInterface
             throw new TransformationFailedException('Expected a \libphonenumber\PhoneNumber.');
         }
 
+        if (!$value->hasCountryCode() && !$value->hasNationalNumber()) {
+            return ['country' => '', 'number' => ''];
+        }
+
         $util = PhoneNumberUtil::getInstance();
 
         if (false === \in_array($util->getRegionCodeForNumber($value), $this->countryChoices)) {
