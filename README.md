@@ -16,7 +16,7 @@ This bundle integrates [Google's libphonenumber](https://github.com/googlei18n/l
  1. Use Composer to download the PhoneNumberBundle:
 
 ```bash
-$ composer require odolbeau/phone-number-bundle
+composer require odolbeau/phone-number-bundle
 ```
 
 if you're using Symfony Flex, that's all you have to do! Otherwise:
@@ -43,7 +43,7 @@ Update your composer.json:
 
 ```diff
 -        "misd/phone-number-bundle": "^1.3",
-+        "odolbeau/phone-number-bundle": "^3.0",
++        "odolbeau/phone-number-bundle": "^4.0",
 ```
 
 Then run `composer update misd/phone-number-bundle odolbeau/phone-number-bundle`.
