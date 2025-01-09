@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraint;
  * @Annotation
  * @NamedArgumentConstructor
  */
-#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::IS_REPEATABLE)]
+#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class PhoneNumber extends Constraint
 {
     public const ANY = 'any';
