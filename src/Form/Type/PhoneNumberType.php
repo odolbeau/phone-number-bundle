@@ -19,7 +19,7 @@ use Misd\PhoneNumberBundle\Form\DataTransformer\PhoneNumberToArrayTransformer;
 use Misd\PhoneNumberBundle\Form\DataTransformer\PhoneNumberToStringTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -99,16 +99,17 @@ class PhoneNumberType extends AbstractType
                 $countryOptions['placeholder'] = $options['country_placeholder'];
             }
 
-            $numberOptions = array_replace([
+            $telOptions = array_replace([
                 'error_bubbling' => true,
                 'required' => $options['required'],
                 'disabled' => $options['disabled'],
                 'translation_domain' => $options['translation_domain'],
+                'trim' => $options['trim'],
             ], $options['number_options']);
 
             $builder
                 ->add('country', ChoiceType::class, $countryOptions)
-                ->add('number', TextType::class, $numberOptions)
+                ->add('number', TelType::class, $telOptions)
                 ->addViewTransformer(new PhoneNumberToArrayTransformer($transformerChoices));
         } else {
             $builder->addViewTransformer(
