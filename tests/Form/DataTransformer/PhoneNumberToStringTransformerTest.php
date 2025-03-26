@@ -45,14 +45,17 @@ class PhoneNumberToStringTransformerTest extends TestCase
     /**
      * @dataProvider transformProvider
      */
-    public function testTransform(string $defaultRegion, int $format, ?string $actual, string $expected): void
+    public function testTransform(string $defaultRegion, PhoneNumberFormat $format, ?string $actual, string $expected): void
     {
         $transformer = new PhoneNumberToStringTransformer($defaultRegion, $format);
 
         $phoneNumberUtil = PhoneNumberUtil::getInstance();
         try {
-            /* @phpstan-ignore-next-line */
-            $phoneNumber = $phoneNumberUtil->parse($actual, $defaultRegion);
+            if (null !== $actual) {
+                $phoneNumber = $phoneNumberUtil->parse($actual, $defaultRegion);
+            } else {
+                $phoneNumber = $actual;
+            }
         } catch (NumberParseException $e) {
             $phoneNumber = $actual;
         }
@@ -73,7 +76,7 @@ class PhoneNumberToStringTransformerTest extends TestCase
      * 2 => Actual value
      * 3 => Expected result.
      *
-     * @return iterable<array{string, int, ?string, string}>
+     * @return iterable<array{string, PhoneNumberFormat, ?string, string}>
      */
     public function transformProvider(): iterable
     {

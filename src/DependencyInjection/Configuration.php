@@ -73,7 +73,7 @@ class Configuration implements ConfigurationInterface
                             })->end()
                         ->end()
                         ->scalarNode('format')
-                            ->defaultValue(PhoneNumberFormat::E164)
+                            ->defaultValue(PhoneNumberFormat::E164->name)
                         ->end()
                     ->end()
                 ->end()
@@ -90,7 +90,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('format')
                             // The difference between serializer and validator is historical, they are here to keep the BC
-                            ->defaultValue(PhoneNumberFormat::INTERNATIONAL)
+                            ->defaultValue(PhoneNumberFormat::INTERNATIONAL->name)
                         ->end()
                     ->end()
                 ->end()

@@ -26,11 +26,11 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 class PhoneNumberToStringTransformer implements DataTransformerInterface
 {
     private string $defaultRegion;
-    private int $format;
+    private PhoneNumberFormat $format;
 
     public function __construct(
         string $defaultRegion = PhoneNumberUtil::UNKNOWN_REGION,
-        int $format = PhoneNumberFormat::INTERNATIONAL,
+        PhoneNumberFormat $format = PhoneNumberFormat::INTERNATIONAL,
     ) {
         $this->defaultRegion = $defaultRegion;
         $this->format = $format;

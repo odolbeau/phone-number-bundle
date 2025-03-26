@@ -37,7 +37,7 @@ class PhoneNumberTest extends TestCase
      *
      * @param string|string[]|null $type
      */
-    public function testMessage(?string $message, string|array|null $type, ?int $format, string $expectedMessage): void
+    public function testMessage(?string $message, string|array|null $type, ?PhoneNumberFormat $format, string $expectedMessage): void
     {
         $phoneNumber = new PhoneNumber($format, $type, null, null, $message);
         $this->assertSame($expectedMessage, $phoneNumber->getMessage());
@@ -50,7 +50,7 @@ class PhoneNumberTest extends TestCase
      * 2 => Format (optional)
      * 3 => Expected message.
      *
-     * @return iterable<array{?string, string|string[]|null, ?int, string}>
+     * @return iterable<array{?string, string|string[]|null, ?PhoneNumberFormat, string}>
      */
     public function messageProvider(): iterable
     {
