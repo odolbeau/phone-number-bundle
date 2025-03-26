@@ -89,13 +89,13 @@ class MisdPhoneNumberExtensionTest extends TestCase
             'misd_phone_number' => [
                 'validator' => [
                     'default_region' => 'GB',
-                    'format' => PhoneNumberFormat::E164,
+                    'format' => PhoneNumberFormat::E164->name,
                 ],
             ],
         ], $this->container);
 
         $this->assertSame('GB', $this->container->getParameter('misd_phone_number.validator.default_region'));
-        $this->assertSame(0, $this->container->getParameter('misd_phone_number.validator.format'));
+        $this->assertSame(PhoneNumberFormat::E164->name, $this->container->getParameter('misd_phone_number.validator.format'));
     }
 
     public function testNormalizerParameters(): void
@@ -106,12 +106,12 @@ class MisdPhoneNumberExtensionTest extends TestCase
             'misd_phone_number' => [
                 'serializer' => [
                     'default_region' => 'FR',
-                    'format' => PhoneNumberFormat::INTERNATIONAL,
+                    'format' => PhoneNumberFormat::INTERNATIONAL->name,
                 ],
             ],
         ], $this->container);
 
         $this->assertSame('FR', $this->container->getParameter('misd_phone_number.serializer.default_region'));
-        $this->assertSame(PhoneNumberFormat::INTERNATIONAL, $this->container->getParameter('misd_phone_number.serializer.format'));
+        $this->assertSame(PhoneNumberFormat::INTERNATIONAL->name, $this->container->getParameter('misd_phone_number.serializer.format'));
     }
 }

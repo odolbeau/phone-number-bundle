@@ -170,6 +170,7 @@ class PhoneNumberType extends AbstractType
             self::WIDGET_SINGLE_TEXT,
             self::WIDGET_COUNTRY_CHOICE,
         ]);
+        $resolver->setAllowedTypes('format', PhoneNumberFormat::class);
 
         $resolver->setAllowedValues('country_display_type', [
             self::DISPLAY_COUNTRY_FULL,

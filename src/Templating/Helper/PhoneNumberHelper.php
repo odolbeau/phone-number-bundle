@@ -15,7 +15,6 @@ namespace Misd\PhoneNumberBundle\Templating\Helper;
 
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
-use libphonenumber\PhoneNumberType;
 use libphonenumber\PhoneNumberUtil;
 use Misd\PhoneNumberBundle\Exception\InvalidArgumentException;
 
@@ -31,18 +30,16 @@ class PhoneNumberHelper
         $this->phoneNumberUtil = $phoneNumberUtil;
     }
 
-    public function format(PhoneNumber|string $phoneNumber, string|int $format = PhoneNumberFormat::INTERNATIONAL): string
+    public function format(PhoneNumber|string $phoneNumber, int|PhoneNumberFormat $format = PhoneNumberFormat::INTERNATIONAL): string
     {
         $phoneNumber = $this->getPhoneNumber($phoneNumber);
 
-        if (true === \is_string($format)) {
-            $constant = '\libphonenumber\PhoneNumberFormat::'.$format;
-
-            if (false === \defined($constant)) {
-                throw new InvalidArgumentException('The format must be either a constant value or name in libphonenumber\PhoneNumberFormat');
+        if (true === \is_int($format)) {
+            try {
+                $format = PhoneNumberFormat::from($format);
+            } catch (\ValueError $error) {
+                throw new InvalidArgumentException('The format must be either a constant value or enum in libphonenumber\PhoneNumberFormat');
             }
-
-            $format = \constant('\libphonenumber\PhoneNumberFormat::'.$format);
         }
 
         return $this->phoneNumberUtil->format($phoneNumber, $format);
@@ -67,7 +64,7 @@ class PhoneNumberHelper
      *
      * @throws InvalidArgumentException if type argument is invalid
      */
-    public function isType($phoneNumber, $type = PhoneNumberType::UNKNOWN): bool
+    public function isType($phoneNumber, $type = PhoneNumberUtil::UNKNOWN_REGION): bool
     {
         $phoneNumber = $this->getPhoneNumber($phoneNumber);
 

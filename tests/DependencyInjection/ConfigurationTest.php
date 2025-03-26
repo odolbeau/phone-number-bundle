@@ -49,12 +49,12 @@ class ConfigurationTest extends TestCase
             'serializer' => [
                 'enabled' => true,
                 'default_region' => 'ZZ',
-                'format' => PhoneNumberFormat::E164,
+                'format' => PhoneNumberFormat::E164->name,
             ],
             'validator' => [
                 'enabled' => true,
                 'default_region' => 'ZZ',
-                'format' => PhoneNumberFormat::INTERNATIONAL,
+                'format' => PhoneNumberFormat::INTERNATIONAL->name,
             ],
         ]];
 
@@ -75,12 +75,12 @@ class ConfigurationTest extends TestCase
             'serializer' => [
                 'enabled' => false,
                 'default_region' => 'ZZ',
-                'format' => PhoneNumberFormat::E164,
+                'format' => PhoneNumberFormat::E164->name,
             ],
             'validator' => [
                 'enabled' => false,
                 'default_region' => 'ZZ',
-                'format' => PhoneNumberFormat::INTERNATIONAL,
+                'format' => PhoneNumberFormat::INTERNATIONAL->name,
             ],
         ]];
 
@@ -95,12 +95,12 @@ class ConfigurationTest extends TestCase
                 'serializer' => [
                     'enabled' => false,
                     'default_region' => 'GB',
-                    'format' => PhoneNumberFormat::E164,
+                    'format' => PhoneNumberFormat::E164->name,
                 ],
                 'validator' => [
                     'enabled' => false,
                     'default_region' => 'GB',
-                    'format' => PhoneNumberFormat::INTERNATIONAL,
+                    'format' => PhoneNumberFormat::INTERNATIONAL->name,
                 ],
             ],
         ], [
@@ -113,12 +113,12 @@ class ConfigurationTest extends TestCase
             'serializer' => [
                 'enabled' => false,
                 'default_region' => 'GB',
-                'format' => PhoneNumberFormat::E164,
+                'format' => PhoneNumberFormat::E164->name,
             ],
             'validator' => [
                 'enabled' => false,
                 'default_region' => 'GB',
-                'format' => PhoneNumberFormat::INTERNATIONAL,
+                'format' => PhoneNumberFormat::INTERNATIONAL->name,
             ],
         ]];
     }
