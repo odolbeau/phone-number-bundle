@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Misd\PhoneNumberBundle\Validator\Constraints;
 
+use libphonenumber\PhoneNumberFormat;
 use Misd\PhoneNumberBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Validator\Attribute\HasNamedArguments;
 use Symfony\Component\Validator\Constraint;
@@ -51,16 +52,16 @@ class PhoneNumber extends Constraint
     public string|array $type = self::ANY;
     public ?string $defaultRegion = null;
     public ?string $regionPath = null;
-    public ?int $format = null;
+    public ?PhoneNumberFormat $format = null;
 
     /**
-     * @param int|null             $format  Specify the format (\libphonenumber\PhoneNumberFormat::*)
-     * @param string|string[]|null $type
-     * @param array<mixed>         $options
+     * @param PhoneNumberFormat|null $format  Specify the format (\libphonenumber\PhoneNumberFormat::*)
+     * @param string|string[]|null   $type
+     * @param array<mixed>           $options
      */
     #[HasNamedArguments]
     public function __construct(
-        ?int $format = null,
+        ?PhoneNumberFormat $format = null,
         string|array|null $type = null,
         ?string $defaultRegion = null,
         ?string $regionPath = null,

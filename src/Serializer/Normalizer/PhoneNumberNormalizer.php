@@ -29,14 +29,14 @@ class PhoneNumberNormalizer implements NormalizerInterface, DenormalizerInterfac
 {
     private PhoneNumberUtil $phoneNumberUtil;
     private string $region;
-    private int $format;
+    private PhoneNumberFormat $format;
 
     /**
-     * @param PhoneNumberUtil $phoneNumberUtil phone number utility
-     * @param string          $region          region code
-     * @param int             $format          display format
+     * @param PhoneNumberUtil   $phoneNumberUtil phone number utility
+     * @param string            $region          region code
+     * @param PhoneNumberFormat $format          display format
      */
-    public function __construct(PhoneNumberUtil $phoneNumberUtil, string $region = PhoneNumberUtil::UNKNOWN_REGION, int $format = PhoneNumberFormat::E164)
+    public function __construct(PhoneNumberUtil $phoneNumberUtil, string $region = PhoneNumberUtil::UNKNOWN_REGION, PhoneNumberFormat $format = PhoneNumberFormat::E164)
     {
         $this->phoneNumberUtil = $phoneNumberUtil;
         $this->region = $region;

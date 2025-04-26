@@ -56,7 +56,7 @@ class PhoneNumberValidatorTest extends TestCase
         array|string|null $type = null,
         ?string $defaultRegion = null,
         ?string $regionPath = null,
-        ?int $format = null,
+        ?PhoneNumberFormat $format = null,
     ): void {
         $constraint = new PhoneNumber($format, $type, $defaultRegion, $regionPath);
 
@@ -113,7 +113,7 @@ class PhoneNumberValidatorTest extends TestCase
      * 3 => Default region (optional).
      * 4 => Region Path (optional).
      *
-     * @return iterable<array{string|LibPhoneNumber|null, bool, 2?: string|string[]|null, 3?: ?string, 4?: ?string, 5?: ?int}>
+     * @return iterable<array{string|LibPhoneNumber|null, bool, 2?: string|string[]|null, 3?: ?string, 4?: ?string, 5?: ?PhoneNumberFormat}>
      */
     public function validateProvider(): iterable
     {
