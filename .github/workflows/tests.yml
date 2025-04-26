@@ -19,11 +19,11 @@ jobs:
             composer-flags: '--prefer-stable'
           # Active release
           - php: 8.3
-            symfony-require: 7.0.*
+            symfony-require: 7.2.*
             composer-flags: '--prefer-stable --ignore-platform-req=php+'
           # Development release
           - php: nightly
-            symfony-require: 7.1.*@dev
+            symfony-require: 7.3.*@dev
             composer-flags: '--ignore-platform-req=php+'
             stability: dev
             can-fail: true
