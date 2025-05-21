@@ -29,13 +29,18 @@ class PhoneNumberToArrayTransformer implements DataTransformerInterface
      * @var string[]
      */
     private array $countryChoices;
+    private bool $manageLeadingZeros;
+
+    private PhoneNumberUtil $phoneNumberUtil;
 
     /**
      * @param string[] $countryChoices
      */
-    public function __construct(array $countryChoices)
+    public function __construct(array $countryChoices, bool $manageLeadingZeros = false)
     {
         $this->countryChoices = $countryChoices;
+        $this->manageLeadingZeros = $manageLeadingZeros;
+        $this->phoneNumberUtil = PhoneNumberUtil::getInstance();
     }
 
     /**
@@ -55,15 +60,19 @@ class PhoneNumberToArrayTransformer implements DataTransformerInterface
             return ['country' => '', 'number' => ''];
         }
 
-        $util = PhoneNumberUtil::getInstance();
-
-        if (false === \in_array($util->getRegionCodeForNumber($value), $this->countryChoices)) {
+        if (false === \in_array($this->phoneNumberUtil->getRegionCodeForNumber($value), $this->countryChoices)) {
             throw new TransformationFailedException('Invalid country.');
         }
 
+        $number = $this->phoneNumberUtil->format($value, PhoneNumberFormat::NATIONAL);
+
+        if ($this->manageLeadingZeros) {
+            $number = $this->removeLeadingZeros($number, $value->getNumberOfLeadingZeros());
+        }
+
         return [
-            'country' => (string) $util->getRegionCodeForNumber($value),
-            'number' => $util->format($value, PhoneNumberFormat::NATIONAL),
+            'country' => (string) $this->phoneNumberUtil->getRegionCodeForNumber($value),
+            'number' => $number,
         ];
     }
 
@@ -89,7 +98,12 @@ class PhoneNumberToArrayTransformer implements DataTransformerInterface
         }
 
         try {
-            $phoneNumber = $util->parse($value['number'], $value['country']);
+            $number = $value['number'];
+            if ($this->manageLeadingZeros) {
+                $number = $this->addLeadingZeros($number, $value['country']);
+            }
+
+            $phoneNumber = $util->parse($number, $value['country']);
         } catch (NumberParseException $e) {
             throw new TransformationFailedException($e->getMessage(), $e->getCode(), $e);
         }
@@ -99,5 +113,38 @@ class PhoneNumberToArrayTransformer implements DataTransformerInterface
         }
 
         return $phoneNumber;
+    }
+
+    private function removeLeadingZeros(string $number, int $leadingZeros): string
+    {
+        if ($leadingZeros <= 0) {
+            return $number;
+        }
+
+        /* @phpstan-ignore-next-line */
+        return preg_replace('/^0{'.$leadingZeros.'}/', '', $number);
+    }
+
+    private function addLeadingZeros(string $number, string $country): string
+    {
+        $metadata = $this->phoneNumberUtil->getMetadataForRegion($country);
+
+        if (!$metadata || !$metadata->getGeneralDesc()->hasNationalNumberPattern()) {
+            return $number;
+        }
+
+        $pattern = $metadata->getGeneralDesc()->getNationalNumberPattern();
+
+        // Determine the number of leading zeros to add
+        if (!preg_match('/^(0+)/', $pattern, $matches)) {
+            return $number;
+        }
+
+        $leadingZeros = $matches[1];
+        if (str_starts_with($number, $leadingZeros)) {
+            return $number;
+        }
+
+        return $leadingZeros.$number;
     }
 }

@@ -109,7 +109,7 @@ class PhoneNumberType extends AbstractType
             $builder
                 ->add('country', ChoiceType::class, $countryOptions)
                 ->add('number', TextType::class, $numberOptions)
-                ->addViewTransformer(new PhoneNumberToArrayTransformer($transformerChoices));
+                ->addViewTransformer(new PhoneNumberToArrayTransformer($transformerChoices, $options['manage_leading_zeros']));
         } else {
             $builder->addViewTransformer(
                 new PhoneNumberToStringTransformer($options['default_region'], $options['format'])
@@ -142,6 +142,16 @@ class PhoneNumberType extends AbstractType
             'preferred_country_choices' => [],
             'country_options' => [],
             'number_options' => [],
+            /*
+             * Option to manage the addition or removal of leading zeros in phone numbers.
+             * This option is only applicable when using the "country_choice" widget.
+             * It ensures that leading zeros are handled correctly and avoids duplication
+             * when the number is formatted or parsed.
+             *
+             * @see PhoneNumberToArrayTransformer::addLeadingZeros()
+             * @see PhoneNumberToArrayTransformer::removeLeadingZeros()
+             */
+            'manage_leading_zeros' => false,
         ]);
 
         $resolver->setAllowedValues('widget', [

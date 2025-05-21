@@ -159,7 +159,8 @@ public function buildForm(FormBuilderInterface $builder, array $options)
     $builder->add('phoneNumber', PhoneNumberType::class, [
         'widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE,
         'country_choices' => ['GB', 'JE', 'FR', 'US'],
-        'preferred_country_choices' => ['GB', 'JE']
+        'preferred_country_choices' => ['GB', 'JE'],
+        'manage_leading_zeros' => true,
     ]);
 }
 ```
@@ -168,6 +169,10 @@ This produces the preferred choices of 'Jersey' and 'United Kingdom', and regula
 
 By default the `country_choices` is empty, which means all countries are included, as is `preferred_country_choices`.
 The option `country_placeholder` can be specified to create a placeholder option on above the whole list.
+
+The option `manage_leading_zeros` can be specified to manage leading zeros in the phone number. By default, it is set to `false`, which means that leading zeros are not managed. 
+If you set it to `true`, the leading zeros will be removed when the phone number is displayed in the form, and added back when the phone number is submitted. 
+This is useful for countries where leading zeros are not used in the international format, but are used in the national format.
 
 The option `country_display_type` can be specified to change the country dropdown label format. There are two formats available :
 | display type                      | Result                 |
