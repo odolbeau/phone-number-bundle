@@ -68,9 +68,6 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('default_region')
                             ->defaultValue(PhoneNumberUtil::UNKNOWN_REGION)
-                            ->beforeNormalization()->always(function ($value) {
-                                return strtoupper($value);
-                            })->end()
                         ->end()
                         ->scalarNode('format')
                             ->defaultValue(PhoneNumberFormat::E164)
@@ -84,9 +81,6 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('enabled')->defaultValue(interface_exists(ValidatorInterface::class))->end()
                         ->scalarNode('default_region')
                             ->defaultValue(PhoneNumberUtil::UNKNOWN_REGION)
-                            ->beforeNormalization()->always(function ($value) {
-                                return strtoupper($value);
-                            })->end()
                         ->end()
                         ->scalarNode('format')
                             // The difference between serializer and validator is historical, they are here to keep the BC

@@ -114,19 +114,4 @@ class MisdPhoneNumberExtensionTest extends TestCase
         $this->assertSame('FR', $this->container->getParameter('misd_phone_number.serializer.default_region'));
         $this->assertSame(PhoneNumberFormat::INTERNATIONAL, $this->container->getParameter('misd_phone_number.serializer.format'));
     }
-
-    public function testValidatorDefaultRegionUppercase(): void
-    {
-        $extension = new MisdPhoneNumberExtension();
-        $this->container = new ContainerBuilder();
-        $extension->load([
-            'misd_phone_number' => [
-                'validator' => [
-                    'default_region' => 'gb',
-                ],
-            ],
-        ], $this->container);
-
-        $this->assertSame('GB', $this->container->getParameter('misd_phone_number.validator.default_region'));
-    }
 }

@@ -39,7 +39,7 @@ class PhoneNumberNormalizer implements NormalizerInterface, DenormalizerInterfac
     public function __construct(PhoneNumberUtil $phoneNumberUtil, string $region = PhoneNumberUtil::UNKNOWN_REGION, int $format = PhoneNumberFormat::E164)
     {
         $this->phoneNumberUtil = $phoneNumberUtil;
-        $this->region = $region;
+        $this->region = mb_strtoupper($region);
         $this->format = $format;
     }
 
