@@ -44,7 +44,7 @@ class PhoneNumberValidator extends ConstraintValidator
         int $format = PhoneNumberFormat::INTERNATIONAL,
     ) {
         $this->phoneUtil = $phoneUtil ?? PhoneNumberUtil::getInstance();
-        $this->defaultRegion = $defaultRegion;
+        $this->defaultRegion = mb_strtoupper($defaultRegion);
         $this->format = $format;
     }
 
