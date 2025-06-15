@@ -44,7 +44,9 @@ class PhoneNumberTypeTest extends TestCase
      */
     public function testSingleField(string $input, array $options, string $output): void
     {
-        $form = $this->factory->create(PhoneNumberType::class, null, $options);
+        $form = $this->factory->create(PhoneNumberType::class, null, array_merge([
+            'number_type' => PhoneNumberType::NUMBER_TYPE_TEL,
+        ], $options));
 
         $form->submit($input);
 
@@ -85,7 +87,10 @@ class PhoneNumberTypeTest extends TestCase
      */
     public function testCountryChoiceValues(array $input, array $output): void
     {
-        $options = ['widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE];
+        $options = [
+            'widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE,
+            'number_type' => PhoneNumberType::NUMBER_TYPE_TEL,
+        ];
         $form = $this->factory->create(PhoneNumberType::class, null, $options);
 
         $form->submit($input);
@@ -131,7 +136,11 @@ class PhoneNumberTypeTest extends TestCase
         $form = $this->factory->create(
             PhoneNumberType::class,
             null,
-            ['widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE, 'country_choices' => $choices]
+            [
+                'widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE,
+                'country_choices' => $choices,
+                'number_type' => PhoneNumberType::NUMBER_TYPE_TEL,
+            ]
         );
 
         $view = $form->createView();
@@ -189,6 +198,7 @@ class PhoneNumberTypeTest extends TestCase
         $options['widget'] = PhoneNumberType::WIDGET_COUNTRY_CHOICE;
         $options['country_display_type'] = $displayType;
         $options['country_display_emoji_flag'] = $displayEmojiFlag;
+        $options['number_type'] = PhoneNumberType::NUMBER_TYPE_TEL;
         $form = $this->factory->create(PhoneNumberType::class, null, $options);
 
         $view = $form->createView();
@@ -244,7 +254,11 @@ class PhoneNumberTypeTest extends TestCase
     public function testCountryChoicePlaceholder(?string $placeholder, ?string $expectedPlaceholder): void
     {
         IntlTestHelper::requireIntl($this);
-        $form = $this->factory->create(PhoneNumberType::class, null, ['widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE, 'country_placeholder' => $placeholder]);
+        $form = $this->factory->create(PhoneNumberType::class, null, [
+            'widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE,
+            'country_placeholder' => $placeholder,
+            'number_type' => PhoneNumberType::NUMBER_TYPE_TEL,
+        ]);
 
         $view = $form->createView();
         $renderedPlaceholder = $view['country']->vars['placeholder'];
@@ -270,7 +284,10 @@ class PhoneNumberTypeTest extends TestCase
         IntlTestHelper::requireFullIntl($this);
         \Locale::setDefault('fr');
 
-        $form = $this->factory->create(PhoneNumberType::class, null, ['widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE]);
+        $form = $this->factory->create(PhoneNumberType::class, null, [
+            'widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE,
+            'number_type' => PhoneNumberType::NUMBER_TYPE_TEL,
+        ]);
 
         $view = $form->createView();
         $choices = $view['country']->vars['choices'];
@@ -283,7 +300,10 @@ class PhoneNumberTypeTest extends TestCase
     {
         $this->expectException(InvalidOptionsException::class);
 
-        $this->factory->create(PhoneNumberType::class, null, ['widget' => 'foo']);
+        $this->factory->create(PhoneNumberType::class, null, [
+            'widget' => 'foo',
+            'number_type' => PhoneNumberType::NUMBER_TYPE_TEL,
+        ]);
     }
 
     public function testGetNameAndBlockPrefixAreTel(): void
@@ -303,6 +323,7 @@ class PhoneNumberTypeTest extends TestCase
                     'class' => 'custom-select-class',
                 ],
             ],
+            'number_type' => PhoneNumberType::NUMBER_TYPE_TEL,
         ]);
         $view = $form->createView();
 
@@ -313,6 +334,7 @@ class PhoneNumberTypeTest extends TestCase
     {
         $form = $this->factory->create(PhoneNumberType::class, null, [
             'widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE,
+            'number_type' => PhoneNumberType::NUMBER_TYPE_TEL,
             'number_options' => [
                 'attr' => [
                     'placeholder' => '000 000',

@@ -19,6 +19,7 @@ use Misd\PhoneNumberBundle\Form\DataTransformer\PhoneNumberToArrayTransformer;
 use Misd\PhoneNumberBundle\Form\DataTransformer\PhoneNumberToStringTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -38,8 +39,18 @@ class PhoneNumberType extends AbstractType
     public const DISPLAY_COUNTRY_FULL = 'display_country_full';
     public const DISPLAY_COUNTRY_SHORT = 'display_country_short';
 
+    public const NUMBER_TYPE_TEL = 'tel';
+    public const NUMBER_TYPE_TEXT = 'text';
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        if (empty($options['number_type'])) {
+            trigger_deprecation('odolbeau/phone-number-bundle', '4.2', 'Not setting the "number_type" option explicitly is deprecated because its default value will change in version 5.');
+            $options['number_type'] = self::NUMBER_TYPE_TEXT;
+        }
+
+        $numberType = self::NUMBER_TYPE_TEL === $options['number_type'] ? TelType::class : TextType::class;
+
         if (self::WIDGET_COUNTRY_CHOICE === $options['widget']) {
             $util = PhoneNumberUtil::getInstance();
 
@@ -108,7 +119,7 @@ class PhoneNumberType extends AbstractType
 
             $builder
                 ->add('country', ChoiceType::class, $countryOptions)
-                ->add('number', TextType::class, $numberOptions)
+                ->add('number', $numberType, $numberOptions)
                 ->addViewTransformer(new PhoneNumberToArrayTransformer($transformerChoices, $options['manage_leading_zeros']));
         } else {
             $builder->addViewTransformer(
@@ -119,7 +130,7 @@ class PhoneNumberType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        $view->vars['type'] = 'tel';
+        $view->vars['type'] = $options['number_type'] ?? 'tel';
         $view->vars['widget'] = $options['widget'];
     }
 
@@ -141,6 +152,7 @@ class PhoneNumberType extends AbstractType
             'country_placeholder' => false,
             'preferred_country_choices' => [],
             'country_options' => [],
+            'number_type' => null,
             'number_options' => [],
             /*
              * Option to manage the addition or removal of leading zeros in phone numbers.
@@ -162,6 +174,12 @@ class PhoneNumberType extends AbstractType
         $resolver->setAllowedValues('country_display_type', [
             self::DISPLAY_COUNTRY_FULL,
             self::DISPLAY_COUNTRY_SHORT,
+        ]);
+
+        $resolver->setAllowedValues('number_type', [
+            null,
+            self::NUMBER_TYPE_TEL,
+            self::NUMBER_TYPE_TEXT,
         ]);
 
         $resolver->setAllowedTypes('country_options', 'array');

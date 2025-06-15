@@ -139,7 +139,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 public function buildForm(FormBuilderInterface $builder, array $options)
 {
-    $builder->add('phoneNumber', PhoneNumberType::class, ['default_region' => 'GB', 'format' => PhoneNumberFormat::NATIONAL]);
+    $builder->add('phoneNumber', PhoneNumberType::class, [
+        'default_region' => 'GB',
+        'format' => PhoneNumberFormat::NATIONAL,
+        'number_type' => PhoneNumberType::NUMBER_TYPE_TEL,
+    ]);
 }
 ```
 
@@ -147,7 +151,7 @@ By default the `default_region` and `format` options are `PhoneNumberUtil::UNKNO
 
 #### Country choice fields
 
-The phone number can be split into a country choice and phone number text fields. This allows the user to choose the relevant country (from a customisable list) and type in the phone number without international dialling.
+The phone number can be split into a country choice and phone number fields. This allows the user to choose the relevant country (from a customisable list) and type in the phone number without international dialling.
 
 ```php
 use libphonenumber\PhoneNumberFormat;
@@ -158,6 +162,7 @@ public function buildForm(FormBuilderInterface $builder, array $options)
 {
     $builder->add('phoneNumber', PhoneNumberType::class, [
         'widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE,
+        'number_type' => PhoneNumberType::NUMBER_TYPE_TEL,
         'country_choices' => ['GB', 'JE', 'FR', 'US'],
         'preferred_country_choices' => ['GB', 'JE'],
         'manage_leading_zeros' => true,
@@ -166,6 +171,8 @@ public function buildForm(FormBuilderInterface $builder, array $options)
 ```
 
 This produces the preferred choices of 'Jersey' and 'United Kingdom', and regular choices of 'France' and 'United States'.
+
+The `number_type` option lets you choose how the phone number should be displayed — either as a `tel` or a `text` field.
 
 By default the `country_choices` is empty, which means all countries are included, as is `preferred_country_choices`.
 The option `country_placeholder` can be specified to create a placeholder option on above the whole list.
