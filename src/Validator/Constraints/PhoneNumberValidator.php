@@ -41,8 +41,13 @@ class PhoneNumberValidator extends ConstraintValidator
     public function __construct(
         ?PhoneNumberUtil $phoneUtil = null,
         string $defaultRegion = PhoneNumberUtil::UNKNOWN_REGION,
-        PhoneNumberFormat $format = PhoneNumberFormat::INTERNATIONAL,
+        PhoneNumberFormat|int $format = PhoneNumberFormat::INTERNATIONAL,
     ) {
+        if (\is_int($format)) {
+            trigger_deprecation('odolbeau/phone-number-bundle', '4.2', 'Passing an int to the "format" argument is deprecated, pass a libphonenumber\PhoneNumberFormat instance instead.');
+            $format = PhoneNumberFormat::from($format);
+        }
+
         $this->phoneUtil = $phoneUtil ?? PhoneNumberUtil::getInstance();
         $this->defaultRegion = mb_strtoupper($defaultRegion);
         $this->format = $format;

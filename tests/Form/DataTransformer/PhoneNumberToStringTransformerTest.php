@@ -35,17 +35,10 @@ class PhoneNumberToStringTransformerTest extends TestCase
         $this->phoneNumberUtil = PhoneNumberUtil::getInstance();
     }
 
-    public function testConstructor(): void
-    {
-        $transformer = new PhoneNumberToStringTransformer();
-
-        $this->assertInstanceOf('Symfony\Component\Form\DataTransformerInterface', $transformer);
-    }
-
     /**
      * @dataProvider transformProvider
      */
-    public function testTransform(string $defaultRegion, PhoneNumberFormat $format, ?string $actual, string $expected): void
+    public function testTransform(string $defaultRegion, PhoneNumberFormat|int $format, ?string $actual, string $expected): void
     {
         $transformer = new PhoneNumberToStringTransformer($defaultRegion, $format);
 
@@ -76,7 +69,7 @@ class PhoneNumberToStringTransformerTest extends TestCase
      * 2 => Actual value
      * 3 => Expected result.
      *
-     * @return iterable<array{string, PhoneNumberFormat, ?string, string}>
+     * @return iterable<array{string, PhoneNumberFormat|int, ?string, string}>
      */
     public function transformProvider(): iterable
     {
@@ -90,6 +83,19 @@ class PhoneNumberToStringTransformerTest extends TestCase
             '+44 1234 567890',
         ];
         yield ['GB', PhoneNumberFormat::NATIONAL, '01234567890', '01234 567890'];
+
+        // Following data are duplicated to ensure BC.
+        // To be removed once "int" format is not accepted anymore
+        yield [PhoneNumberUtil::UNKNOWN_REGION, 1, null, ''];
+        yield [PhoneNumberUtil::UNKNOWN_REGION, 2, 'foo', self::TRANSFORMATION_FAILED];
+        yield [PhoneNumberUtil::UNKNOWN_REGION, 2, '0', self::TRANSFORMATION_FAILED];
+        yield [
+            PhoneNumberUtil::UNKNOWN_REGION,
+            1,
+            '+441234567890',
+            '+44 1234 567890',
+        ];
+        yield ['GB', 2, '01234567890', '01234 567890'];
     }
 
     /**

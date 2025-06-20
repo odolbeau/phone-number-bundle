@@ -30,9 +30,13 @@ class PhoneNumberToStringTransformer implements DataTransformerInterface
 
     public function __construct(
         string $defaultRegion = PhoneNumberUtil::UNKNOWN_REGION,
-        PhoneNumberFormat $format = PhoneNumberFormat::INTERNATIONAL,
+        PhoneNumberFormat|int $format = PhoneNumberFormat::INTERNATIONAL,
     ) {
         $this->defaultRegion = $defaultRegion;
+        if (\is_int($format)) {
+            trigger_deprecation('odolbeau/phone-number-bundle', '4.2', 'Using an int for $format is deprecated. Use libphonenumber\PhoneNumberFormat enum instead.');
+            $format = PhoneNumberFormat::from($format);
+        }
         $this->format = $format;
     }
 

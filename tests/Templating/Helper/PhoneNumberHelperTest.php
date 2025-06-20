@@ -44,7 +44,7 @@ class PhoneNumberHelperTest extends TestCase
     /**
      * @dataProvider processProvider
      */
-    public function testProcess(PhoneNumberFormat|int $format, PhoneNumberFormat $expectedFormat): void
+    public function testProcess(PhoneNumberFormat|int|string $format, PhoneNumberFormat $expectedFormat): void
     {
         $phoneNumber = $this->prophesize(PhoneNumber::class);
         $this->phoneNumberUtil
@@ -59,12 +59,13 @@ class PhoneNumberHelperTest extends TestCase
      * 0 => Format
      * 1 => Expected format.
      *
-     * @return iterable<array{PhoneNumberFormat|int, PhoneNumberFormat}>
+     * @return iterable<array{PhoneNumberFormat|int|string, PhoneNumberFormat}>
      */
     public function processProvider(): iterable
     {
         yield [PhoneNumberFormat::NATIONAL, PhoneNumberFormat::NATIONAL];
         yield [PhoneNumberFormat::NATIONAL->value, PhoneNumberFormat::NATIONAL];
+        yield ['NATIONAL', PhoneNumberFormat::NATIONAL];
     }
 
     public function testProcessInvalidArgumentException(): void
