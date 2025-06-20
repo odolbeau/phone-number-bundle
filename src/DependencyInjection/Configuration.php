@@ -39,6 +39,19 @@ class Configuration implements ConfigurationInterface
             return $value;
         };
 
+        $normalizeFormat = static function (int|string $value): PhoneNumberFormat {
+            trigger_deprecation('odolbeau/phone-number-bundle', '4.2', 'Passing a scalar for the "format" configuration key is deprecated, pass a libphonenumber\PhoneNumberFormat instance instead.');
+
+            if (\is_int($value)) {
+                return PhoneNumberFormat::from($value);
+            }
+
+            /** @var PhoneNumberFormat */
+            $format = (new \ReflectionEnumBackedCase(PhoneNumberFormat::class, $value))->getValue();
+
+            return $format;
+        };
+
         $rootNode
             ->children()
                 ->arrayNode('twig')
@@ -69,8 +82,13 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('default_region')
                             ->defaultValue(PhoneNumberUtil::UNKNOWN_REGION)
                         ->end()
-                        ->scalarNode('format')
-                            ->defaultValue(PhoneNumberFormat::E164->name)
+                        ->enumNode('format')
+                            ->values(PhoneNumberFormat::cases())
+                            ->defaultValue(PhoneNumberFormat::E164)
+                            ->beforeNormalization()
+                                ->ifTrue(fn ($value) => \is_string($value) || \is_int($value))
+                                ->then($normalizeFormat)
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
@@ -82,9 +100,14 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('default_region')
                             ->defaultValue(PhoneNumberUtil::UNKNOWN_REGION)
                         ->end()
-                        ->scalarNode('format')
+                        ->enumNode('format')
                             // The difference between serializer and validator is historical, they are here to keep the BC
-                            ->defaultValue(PhoneNumberFormat::INTERNATIONAL->name)
+                            ->values(PhoneNumberFormat::cases())
+                            ->defaultValue(PhoneNumberFormat::INTERNATIONAL)
+                            ->beforeNormalization()
+                                ->ifTrue(fn ($value) => \is_string($value) || \is_int($value))
+                                ->then($normalizeFormat)
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
