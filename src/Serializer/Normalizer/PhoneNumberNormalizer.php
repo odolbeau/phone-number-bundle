@@ -29,15 +29,20 @@ class PhoneNumberNormalizer implements NormalizerInterface, DenormalizerInterfac
 {
     private PhoneNumberUtil $phoneNumberUtil;
     private string $region;
-    private int $format;
+    private PhoneNumberFormat $format;
 
     /**
-     * @param PhoneNumberUtil $phoneNumberUtil phone number utility
-     * @param string          $region          region code
-     * @param int             $format          display format
+     * @param PhoneNumberUtil   $phoneNumberUtil phone number utility
+     * @param string            $region          region code
+     * @param PhoneNumberFormat $format          display format
      */
-    public function __construct(PhoneNumberUtil $phoneNumberUtil, string $region = PhoneNumberUtil::UNKNOWN_REGION, int $format = PhoneNumberFormat::E164)
+    public function __construct(PhoneNumberUtil $phoneNumberUtil, string $region = PhoneNumberUtil::UNKNOWN_REGION, PhoneNumberFormat|int $format = PhoneNumberFormat::E164)
     {
+        if (\is_int($format)) {
+            trigger_deprecation('odolbeau/phone-number-bundle', '4.2', 'Passing an int to the "format" parameter is deprecated, pass a libphonenumber\PhoneNumberFormat instance instead.');
+            $format = PhoneNumberFormat::from($format);
+        }
+
         $this->phoneNumberUtil = $phoneNumberUtil;
         $this->region = mb_strtoupper($region);
         $this->format = $format;

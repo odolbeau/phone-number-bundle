@@ -105,4 +105,15 @@ class PhoneNumberNormalizerTest extends TestCase
         $normalizer = new PhoneNumberNormalizer($phoneNumberUtil->reveal());
         $normalizer->denormalize('invalid phone number', 'libphonenumber\PhoneNumber');
     }
+
+    /**
+     * Ensure BC is respected.
+     */
+    public function testStillSupportsIntAsFormatArgument(): void
+    {
+        $normalizer = new PhoneNumberNormalizer($this->prophesize(PhoneNumberUtil::class)->reveal(), format: 1);
+
+        $this->assertTrue($normalizer->supportsNormalization(new PhoneNumber()));
+        $this->assertFalse($normalizer->supportsNormalization(new \stdClass()));
+    }
 }

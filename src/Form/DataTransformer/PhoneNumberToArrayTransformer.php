@@ -129,7 +129,7 @@ class PhoneNumberToArrayTransformer implements DataTransformerInterface
     {
         $metadata = $this->phoneNumberUtil->getMetadataForRegion($country);
 
-        if (!$metadata || !$metadata->getGeneralDesc()->hasNationalNumberPattern()) {
+        if (!$metadata || !$metadata->getGeneralDesc()?->hasNationalNumberPattern()) {
             return $number;
         }
 

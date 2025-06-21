@@ -77,6 +77,11 @@ class PhoneNumberTypeTest extends TestCase
         yield ['+1 650-253-0000', ['default_region' => 'GB', 'format' => PhoneNumberFormat::NATIONAL], '00 1 650-253-0000'];
         yield ['01234 567890', ['default_region' => 'GB'], '+44 1234 567890'];
         yield ['', [], ''];
+
+        // Following cases are here to ensure BC
+        yield ['+44 1234 567890', ['format' => 2], '+44 1234 567890'];
+        yield ['+44 1234 567890', ['default_region' => 'GB', 'format' => 2], '01234 567890'];
+        yield ['+1 650-253-0000', ['default_region' => 'GB', 'format' => 2], '00 1 650-253-0000'];
     }
 
     /**

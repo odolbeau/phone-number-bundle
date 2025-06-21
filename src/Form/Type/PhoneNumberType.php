@@ -171,6 +171,15 @@ class PhoneNumberType extends AbstractType
             self::WIDGET_COUNTRY_CHOICE,
         ]);
 
+        $resolver->setAllowedTypes('format', ['int', PhoneNumberFormat::class]);
+        $resolver->setNormalizer('format', static function ($options, $value) {
+            if (\is_int($value)) {
+                trigger_deprecation('odolbeau/phone-number-bundle', '4.2', 'Passing an int to the "format" option is deprecated, pass a libphonenumber\PhoneNumberFormat instance instead.');
+            }
+
+            return $value;
+        });
+
         $resolver->setAllowedValues('country_display_type', [
             self::DISPLAY_COUNTRY_FULL,
             self::DISPLAY_COUNTRY_SHORT,

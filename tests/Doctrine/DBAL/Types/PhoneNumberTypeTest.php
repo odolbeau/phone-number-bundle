@@ -89,7 +89,7 @@ class PhoneNumberTypeTest extends TestCase
 
     public function testConvertToDatabaseValueWithPhoneNumber(): void
     {
-        $phoneNumber = $this->phoneNumberUtil->parse('+441234567890', PhoneNumberUtil::UNKNOWN_REGION);
+        $phoneNumber = $this->phoneNumberUtil->parse('+441234567890');
 
         $this->assertSame('+441234567890', $this->type->convertToDatabaseValue($phoneNumber, $this->platform->reveal()));
     }
@@ -116,7 +116,7 @@ class PhoneNumberTypeTest extends TestCase
 
     public function testConvertToPHPValueWithAPhoneNumberInstance(): void
     {
-        $expectedPhoneNumber = $this->phoneNumberUtil->parse('+441234567890', PhoneNumberUtil::UNKNOWN_REGION);
+        $expectedPhoneNumber = $this->phoneNumberUtil->parse('+441234567890');
 
         $phoneNumber = $this->type->convertToPHPValue($expectedPhoneNumber, $this->platform->reveal());
 

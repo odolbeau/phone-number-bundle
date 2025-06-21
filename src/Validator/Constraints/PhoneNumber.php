@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Misd\PhoneNumberBundle\Validator\Constraints;
 
+use libphonenumber\PhoneNumberFormat;
 use Misd\PhoneNumberBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Validator\Attribute\HasNamedArguments;
 use Symfony\Component\Validator\Constraint;
@@ -51,16 +52,16 @@ class PhoneNumber extends Constraint
     public string|array $type = self::ANY;
     public ?string $defaultRegion = null;
     public ?string $regionPath = null;
-    public ?int $format = null;
+    public ?PhoneNumberFormat $format = null;
 
     /**
-     * @param int|null             $format  Specify the format (\libphonenumber\PhoneNumberFormat::*)
-     * @param string|string[]|null $type
-     * @param array<mixed>         $options
+     * @param PhoneNumberFormat|null $format  Specify the format (\libphonenumber\PhoneNumberFormat::*)
+     * @param string|string[]|null   $type
+     * @param array<mixed>           $options
      */
     #[HasNamedArguments]
     public function __construct(
-        ?int $format = null,
+        PhoneNumberFormat|int|null $format = null,
         string|array|null $type = null,
         ?string $defaultRegion = null,
         ?string $regionPath = null,
@@ -70,6 +71,11 @@ class PhoneNumber extends Constraint
         array $options = [],
     ) {
         parent::__construct($options, $groups, $payload);
+
+        if (\is_int($format)) {
+            trigger_deprecation('odolbeau/phone-number-bundle', '4.2', 'Passing an int to the "format" argument is deprecated, pass a libphonenumber\PhoneNumberFormat instance instead.');
+            $format = PhoneNumberFormat::from($format);
+        }
 
         $this->message = $message ?? $this->message;
         $this->format = $format ?? $this->format;
