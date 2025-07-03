@@ -8,6 +8,11 @@
         <service id="Misd\PhoneNumberBundle\Form\Type\PhoneNumberType">
             <tag name="form.type" alias="phone_number"/>
         </service>
+
+        <service id="Misd\PhoneNumberBundle\Form\Extension\PhoneNumberTypeEqualityExtension">
+            <tag name="form.type_extension" extended-type="Misd\PhoneNumberBundle\Form\Type\PhoneNumberType"/>
+            <argument type="service" id="form.property_accessor" />
+        </service>
     </services>
 
 </container>
