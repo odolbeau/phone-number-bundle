@@ -40,7 +40,7 @@
             </trans-unit>
             <trans-unit id="10">
                 <source>This value is not a valid VoIP number.</source>
-                <target>Dieser Wert ist keine gültige VoIP-Telefonnummer. </target>
+                <target>Dieser Wert ist keine gültige VoIP-Telefonnummer.</target>
             </trans-unit>
             <trans-unit id="11">
                 <source>This value is not a valid voicemail access number.</source>
