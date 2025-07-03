@@ -14,6 +14,38 @@
                 <source>This value is not a valid mobile number.</source>
                 <target>Questo valore non è valido per una linea telefonica mobile.</target>
             </trans-unit>
+            <trans-unit id="4">
+                <source>This value is not a valid pager number.</source>
+                <target>Questo valore non è un numero di cercapersone valido.</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>This value is not a valid personal number.</source>
+                <target>Questo valore non è un numero personale valido.</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>This value is not a valid premium-rate number.</source>
+                <target>Questo valore non è un numero a tariffa maggiorata valido.</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>This value is not a valid shared-cost number.</source>
+                <target>Questo valore non è un numero a costo condiviso valido.</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>This value is not a valid toll-free number.</source>
+                <target>Questo valore non è un numero verde valido.</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>This value is not a valid UAN.</source>
+                <target>Questo valore non è un UAN valido.</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>This value is not a valid VoIP number.</source>
+                <target>Questo valore non è un numero VoIP valido.</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>This value is not a valid voicemail access number.</source>
+                <target>Questo valore non è un numero di accesso alla segreteria valido.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
