@@ -95,7 +95,7 @@ class MisdPhoneNumberExtensionTest extends TestCase
         ], $this->container);
 
         $this->assertSame('GB', $this->container->getParameter('misd_phone_number.validator.default_region'));
-        $this->assertSame(0, $this->container->getParameter('misd_phone_number.validator.format'));
+        $this->assertSame(PhoneNumberFormat::E164, $this->container->getParameter('misd_phone_number.validator.format'));
     }
 
     public function testNormalizerParameters(): void

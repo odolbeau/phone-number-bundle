@@ -71,7 +71,7 @@ class PhoneNumberType extends Type
         $util = PhoneNumberUtil::getInstance();
 
         try {
-            return $util->parse($value, PhoneNumberUtil::UNKNOWN_REGION);
+            return $util->parse($value);
         } catch (NumberParseException $e) {
             if (method_exists(ConversionException::class, 'conversionFailed')) {
                 // DBAL < 4

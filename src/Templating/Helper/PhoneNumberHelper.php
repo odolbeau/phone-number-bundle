@@ -15,7 +15,6 @@ namespace Misd\PhoneNumberBundle\Templating\Helper;
 
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
-use libphonenumber\PhoneNumberType;
 use libphonenumber\PhoneNumberUtil;
 use Misd\PhoneNumberBundle\Exception\InvalidArgumentException;
 
@@ -31,18 +30,27 @@ class PhoneNumberHelper
         $this->phoneNumberUtil = $phoneNumberUtil;
     }
 
-    public function format(PhoneNumber|string $phoneNumber, string|int $format = PhoneNumberFormat::INTERNATIONAL): string
+    public function format(PhoneNumber|string $phoneNumber, string|int|PhoneNumberFormat $format = PhoneNumberFormat::INTERNATIONAL): string
     {
         $phoneNumber = $this->getPhoneNumber($phoneNumber);
 
         if (true === \is_string($format)) {
-            $constant = '\libphonenumber\PhoneNumberFormat::'.$format;
+            trigger_deprecation('odolbeau/phone-number-bundle', '4.2', 'Passing a string to the "format" parameter is deprecated, pass a libphonenumber\PhoneNumberFormat instance instead.');
 
+            $constant = '\libphonenumber\PhoneNumberFormat::'.$format;
             if (false === \defined($constant)) {
                 throw new InvalidArgumentException('The format must be either a constant value or name in libphonenumber\PhoneNumberFormat');
             }
 
             $format = \constant('\libphonenumber\PhoneNumberFormat::'.$format);
+        } elseif (true === \is_int($format)) {
+            trigger_deprecation('odolbeau/phone-number-bundle', '4.2', 'Passing a int to the "format" parameter is deprecated, pass a libphonenumber\PhoneNumberFormat instance instead.');
+
+            try {
+                $format = PhoneNumberFormat::from($format);
+            } catch (\ValueError $error) {
+                throw new InvalidArgumentException('The format must be either a constant value or enum in libphonenumber\PhoneNumberFormat');
+            }
         }
 
         return $this->phoneNumberUtil->format($phoneNumber, $format);
@@ -67,7 +75,7 @@ class PhoneNumberHelper
      *
      * @throws InvalidArgumentException if type argument is invalid
      */
-    public function isType($phoneNumber, $type = PhoneNumberType::UNKNOWN): bool
+    public function isType($phoneNumber, $type = PhoneNumberUtil::UNKNOWN_REGION): bool
     {
         $phoneNumber = $this->getPhoneNumber($phoneNumber);
 
