@@ -18,6 +18,7 @@ use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -80,7 +81,16 @@ class PhoneNumberNormalizer implements NormalizerInterface, DenormalizerInterfac
         try {
             return $this->phoneNumberUtil->parse($data, $this->region);
         } catch (NumberParseException $e) {
-            throw new UnexpectedValueException($e->getMessage(), $e->getCode(), $e);
+            if (!isset($context['not_normalizable_value_exceptions'])) {
+                throw new UnexpectedValueException($e->getMessage(), $e->getCode(), $e);
+            }
+
+            $context['not_normalizable_value_exceptions'][] = NotNormalizableValueException::createForUnexpectedDataType($e->getMessage(), $data, ['string'], $context['deserialization_path'] ?? null, true, $e->getCode(), $e);
+
+            $phoneNumber = new PhoneNumber();
+            $phoneNumber->setRawInput($data);
+
+            return $phoneNumber;
         }
     }
 
