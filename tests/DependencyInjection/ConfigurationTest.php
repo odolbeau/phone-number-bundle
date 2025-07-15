@@ -39,6 +39,7 @@ class ConfigurationTest extends TestCase
      */
     public function configurationDataProvider(): iterable
     {
+        // Empty Configuration
         yield [[], [
             'twig' => [
                 'enabled' => true,
@@ -58,6 +59,7 @@ class ConfigurationTest extends TestCase
             ],
         ]];
 
+        // Everything deactivated
         yield [[
             'misd_phone_number' => [
                 'twig' => false,
@@ -84,6 +86,7 @@ class ConfigurationTest extends TestCase
             ],
         ]];
 
+        // With custom configuration
         yield [[
             'misd_phone_number' => [
                 'twig' => [
@@ -101,6 +104,84 @@ class ConfigurationTest extends TestCase
                     'enabled' => false,
                     'default_region' => 'GB',
                     'format' => PhoneNumberFormat::INTERNATIONAL,
+                ],
+            ],
+        ], [
+            'twig' => [
+                'enabled' => false,
+            ],
+            'form' => [
+                'enabled' => false,
+            ],
+            'serializer' => [
+                'enabled' => false,
+                'default_region' => 'GB',
+                'format' => PhoneNumberFormat::E164,
+            ],
+            'validator' => [
+                'enabled' => false,
+                'default_region' => 'GB',
+                'format' => PhoneNumberFormat::INTERNATIONAL,
+            ],
+        ]];
+
+        // Same with BC (int)
+        yield [[
+            'misd_phone_number' => [
+                'twig' => [
+                    'enabled' => false,
+                ],
+                'form' => [
+                    'enabled' => false,
+                ],
+                'serializer' => [
+                    'enabled' => false,
+                    'default_region' => 'GB',
+                    'format' => 0,
+                ],
+                'validator' => [
+                    'enabled' => false,
+                    'default_region' => 'GB',
+                    'format' => 1,
+                ],
+            ],
+        ], [
+            'twig' => [
+                'enabled' => false,
+            ],
+            'form' => [
+                'enabled' => false,
+            ],
+            'serializer' => [
+                'enabled' => false,
+                'default_region' => 'GB',
+                'format' => PhoneNumberFormat::E164,
+            ],
+            'validator' => [
+                'enabled' => false,
+                'default_region' => 'GB',
+                'format' => PhoneNumberFormat::INTERNATIONAL,
+            ],
+        ]];
+
+        // Same with BC (string)
+        yield [[
+            'misd_phone_number' => [
+                'twig' => [
+                    'enabled' => false,
+                ],
+                'form' => [
+                    'enabled' => false,
+                ],
+                'serializer' => [
+                    'enabled' => false,
+                    'default_region' => 'GB',
+                    'format' => 'E164',
+                ],
+                'validator' => [
+                    'enabled' => false,
+                    'default_region' => 'GB',
+                    'format' => 'INTERNATIONAL',
                 ],
             ],
         ], [

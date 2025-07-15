@@ -37,7 +37,7 @@ class PhoneNumberTest extends TestCase
      *
      * @param string|string[]|null $type
      */
-    public function testMessage(?string $message, string|array|null $type, ?int $format, string $expectedMessage): void
+    public function testMessage(?string $message, string|array|null $type, PhoneNumberFormat|int|null $format, string $expectedMessage): void
     {
         $phoneNumber = new PhoneNumber($format, $type, null, null, $message);
         $this->assertSame($expectedMessage, $phoneNumber->getMessage());
@@ -50,7 +50,7 @@ class PhoneNumberTest extends TestCase
      * 2 => Format (optional)
      * 3 => Expected message.
      *
-     * @return iterable<array{?string, string|string[]|null, ?int, string}>
+     * @return iterable<array{?string, string|string[]|null, ?PhoneNumberFormat, string}>
      */
     public function messageProvider(): iterable
     {
@@ -71,5 +71,12 @@ class PhoneNumberTest extends TestCase
         yield ['foo', 'fixed_line', null, 'foo'];
         yield ['foo', 'mobile', null, 'foo'];
         yield [null, null, PhoneNumberFormat::E164, 'This value is not a valid phone number.'];
+    }
+
+    public function testBCPromiseIsRespected(): void
+    {
+        $phoneNumber = new PhoneNumber(0);
+        $this->assertSame('This value is not a valid phone number.', $phoneNumber->getMessage());
+        $this->assertSame(PhoneNumberFormat::E164, $phoneNumber->format);
     }
 }

@@ -26,13 +26,17 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 class PhoneNumberToStringTransformer implements DataTransformerInterface
 {
     private string $defaultRegion;
-    private int $format;
+    private PhoneNumberFormat $format;
 
     public function __construct(
         string $defaultRegion = PhoneNumberUtil::UNKNOWN_REGION,
-        int $format = PhoneNumberFormat::INTERNATIONAL,
+        PhoneNumberFormat|int $format = PhoneNumberFormat::INTERNATIONAL,
     ) {
         $this->defaultRegion = $defaultRegion;
+        if (\is_int($format)) {
+            trigger_deprecation('odolbeau/phone-number-bundle', '4.2', 'Using an int for $format is deprecated. Use libphonenumber\PhoneNumberFormat enum instead.');
+            $format = PhoneNumberFormat::from($format);
+        }
         $this->format = $format;
     }
 

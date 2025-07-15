@@ -44,7 +44,7 @@ class PhoneNumberHelperTest extends TestCase
     /**
      * @dataProvider processProvider
      */
-    public function testProcess(int|string $format, int $expectedFormat): void
+    public function testProcess(PhoneNumberFormat|int|string $format, PhoneNumberFormat $expectedFormat): void
     {
         $phoneNumber = $this->prophesize(PhoneNumber::class);
         $this->phoneNumberUtil
@@ -59,11 +59,12 @@ class PhoneNumberHelperTest extends TestCase
      * 0 => Format
      * 1 => Expected format.
      *
-     * @return iterable<array{string|int, int}>
+     * @return iterable<array{PhoneNumberFormat|int|string, PhoneNumberFormat}>
      */
     public function processProvider(): iterable
     {
         yield [PhoneNumberFormat::NATIONAL, PhoneNumberFormat::NATIONAL];
+        yield [PhoneNumberFormat::NATIONAL->value, PhoneNumberFormat::NATIONAL];
         yield ['NATIONAL', PhoneNumberFormat::NATIONAL];
     }
 
@@ -73,13 +74,13 @@ class PhoneNumberHelperTest extends TestCase
 
         $phoneNumber = $this->prophesize(PhoneNumber::class);
 
-        $this->helper->format($phoneNumber->reveal(), 'foo');
+        $this->helper->format($phoneNumber->reveal(), 999);
     }
 
     /**
      * @dataProvider formatOutOfCountryCallingNumberProvider
      */
-    public function testFormatOutOfCountryCallingNumber(string $phoneNumber, string $defaultRegion, ?string $regionCode, string $expectedResult): void
+    public function testFormatOutOfCountryCallingNumber(string $phoneNumber, string $defaultRegion, string $regionCode, string $expectedResult): void
     {
         $phoneNumberUtil = PhoneNumberUtil::getInstance();
         $helper = new PhoneNumberHelper($phoneNumberUtil);
@@ -101,6 +102,6 @@ class PhoneNumberHelperTest extends TestCase
     {
         yield ['1-800-854-3680', 'US', 'US', '1 (800) 854-3680'];
         yield ['1-800-854-3680', 'US', 'NL', '00 1 800-854-3680'];
-        yield ['1-800-854-3680', 'US', null, '+1 800-854-3680'];
+        yield ['1-800-854-3680', 'US', 'ZZ', '+1 800-854-3680'];
     }
 }
