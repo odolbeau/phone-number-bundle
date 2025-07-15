@@ -21,7 +21,11 @@ use Misd\PhoneNumberBundle\Serializer\Normalizer\PhoneNumberNormalizer;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Exception\PartialDenormalizationException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
+use Symfony\Component\Serializer\Exception\UnsupportedFormatException;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 /**
@@ -115,5 +119,45 @@ class PhoneNumberNormalizerTest extends TestCase
 
         $this->assertTrue($normalizer->supportsNormalization(new PhoneNumber()));
         $this->assertFalse($normalizer->supportsNormalization(new \stdClass()));
+    }
+
+    public function testPartialDenormalizationOnInvalidPhoneNumber(): void
+    {
+        $json = json_encode([
+            'phone' => '+1234567890123456789012345678901234567890', // too long
+        ]);
+
+        try {
+            $serializer = new Serializer([
+                new PhoneNumberNormalizer(PhoneNumberUtil::getInstance(), 'FR'),
+                new ObjectNormalizer(),
+            ], [
+                new JsonEncoder(),
+            ]);
+
+            $serializer->deserialize($json, TestDto::class, 'json', [
+                'collect_denormalization_errors' => true,
+            ]);
+
+            $this->fail('Expected PartialDenormalizationException not thrown.');
+        } catch (PartialDenormalizationException $e) {
+            $errors = $e->getErrors();
+            $this->assertCount(1, $errors);
+
+            $error = $errors[0];
+            $this->assertSame(class_exists(UnsupportedFormatException::class) ? 'phone' : null, $error->getPath());
+            $this->assertStringContainsString('too long', $error->getMessage());
+
+            $data = $e->getData();
+            $this->assertInstanceOf(TestDto::class, $data);
+        }
+    }
+}
+
+class TestDto
+{
+    public function __construct(
+        public ?PhoneNumber $phone,
+    ) {
     }
 }
