@@ -42,21 +42,21 @@ class PhoneNumberTypeEqualityExtension extends AbstractTypeExtension
             $newPhoneNumber = $event->getData();
 
             $parentForm = $event->getForm()->getParent();
-            $propertyName = $event->getForm()->getName();
+            $propertyPath = $event->getForm()->getPropertyPath();
 
             if (!$parentForm) {
                 return;
             }
 
             $original = $parentForm->getData();
-            if (!$original || !$propertyName) {
+            if (!$original || !$propertyPath) {
                 return;
             }
 
-            if ($this->propertyAccessor->isReadable($original, $propertyName)) {
-                $originalPhoneNumber = $this->propertyAccessor->getValue($original, $propertyName);
+            if ($this->propertyAccessor->isReadable($original, $propertyPath)) {
+                $originalPhoneNumber = $this->propertyAccessor->getValue($original, $propertyPath);
             } else {
-                trigger_deprecation('odolbeau/phone-number-bundle', '4.2', 'Could not access property "%s" on class "%s". Make sure it is readable or add a getter method.', $propertyName, $original::class);
+                trigger_deprecation('odolbeau/phone-number-bundle', '4.2', 'Could not access property "%s" on "%s". Make sure it is readable or add a getter method.', $propertyPath, get_debug_type($original));
 
                 return;
             }
