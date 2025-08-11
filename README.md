@@ -109,7 +109,7 @@ The `phone_number_format` filter can be used to format a phone number object. A 
 For example, to format an object called `myPhoneNumber` in the `libphonenumber\PhoneNumberFormat::NATIONAL` format:
 
 ```php
-{{ myPhoneNumber|phone_number_format('NATIONAL') }}
+{{ myPhoneNumber|phone_number_format(constant('libphonenumber\PhoneNumberFormat::NATIONAL')) }}
 ```
 
 By default phone numbers are formatted in the `libphonenumber\PhoneNumberFormat::INTERNATIONAL` format.
