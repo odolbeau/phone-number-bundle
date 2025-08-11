@@ -31,7 +31,7 @@ class PhoneNumberTypeEqualityExtensionTest extends TypeTestCase
         ];
     }
 
-    public function testNoChangeKeepsOriginalInstance(): void
+    public function testNoChangeInObjectKeepsOriginalInstance(): void
     {
         $phone = new PhoneNumber();
         $phone->setCountryCode(33);
@@ -65,5 +65,24 @@ class PhoneNumberTypeEqualityExtensionTest extends TypeTestCase
         $form->submit(['phoneNumber' => '+33612345678']);
 
         $this->assertSame($entity->getPhoneNumber(), $phone);
+    }
+
+    public function testNoChangeInArrayKeepsOriginalInstance(): void
+    {
+        $phone = new PhoneNumber();
+        $phone->setCountryCode(33);
+        $phone->setNationalNumber('612345678');
+
+        $data = ['phoneNumber' => $phone];
+
+        $form = $this->factory->createBuilder(FormType::class, $data)
+            ->add('phoneNumber', PhoneNumberType::class, [
+                'number_type' => PhoneNumberType::NUMBER_TYPE_TEL,
+            ])
+            ->getForm();
+
+        $form->submit(['phoneNumber' => '+33612345678']);
+
+        $this->assertSame($data['phoneNumber'], $phone);
     }
 }
