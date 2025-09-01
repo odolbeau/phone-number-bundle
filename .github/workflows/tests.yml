@@ -21,9 +21,12 @@ jobs:
           - php: 8.3
             symfony-require: 7.2.*
             composer-flags: '--prefer-stable --ignore-platform-req=php+'
+          - php: 8.4
+            symfony-require: 7.3.*
+            composer-flags: '--prefer-stable'
           # Development release
           - php: nightly
-            symfony-require: 7.3.*@dev
+            symfony-require: 7.4.*@dev
             composer-flags: '--ignore-platform-req=php+'
             stability: dev
             can-fail: true
