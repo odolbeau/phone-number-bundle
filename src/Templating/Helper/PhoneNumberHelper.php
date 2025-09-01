@@ -35,8 +35,6 @@ class PhoneNumberHelper
         $phoneNumber = $this->getPhoneNumber($phoneNumber);
 
         if (true === \is_string($format)) {
-            trigger_deprecation('odolbeau/phone-number-bundle', '4.2', 'Passing a string to the "format" parameter is deprecated, pass a libphonenumber\PhoneNumberFormat instance instead.');
-
             $constant = '\libphonenumber\PhoneNumberFormat::'.$format;
             if (false === \defined($constant)) {
                 throw new InvalidArgumentException('The format must be either a constant value or name in libphonenumber\PhoneNumberFormat');
