@@ -108,8 +108,10 @@ The `phone_number_format` filter can be used to format a phone number object. A 
 
 For example, to format an object called `myPhoneNumber` in the `libphonenumber\PhoneNumberFormat::NATIONAL` format:
 
-```php
+```twig
 {{ myPhoneNumber|phone_number_format('NATIONAL') }}
+{# or #}
+{{ myPhoneNumber|phone_number_format(enum('libphonenumber\PhoneNumberFormat').NATIONAL) }}
 ```
 
 By default phone numbers are formatted in the `libphonenumber\PhoneNumberFormat::INTERNATIONAL` format.
@@ -120,7 +122,7 @@ The `phone_number_of_type` test can be used to check a phone number against a ty
 
 For example, to check if an object called `myPhoneNumber` is a `libphonenumber\PhoneNumberType::MOBILE` type:
 
-```php
+```twig
 {% if myPhoneNumber is phone_number_of_type('MOBILE') }} %} ... {% endif %}
 ```
 
@@ -240,7 +242,7 @@ public function getCountryCode()
 }
 ```
 
-By default any valid phone number will be accepted. You can restrict the type through the `type` property, recognised values:
+By default, any valid phone number will be accepted. You can restrict the type through the `type` property, recognised values:
 
 - `Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber::ANY` (default)
 - `Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber::FIXED_LINE`
