@@ -97,8 +97,8 @@ class PhoneNumberValidatorTest extends TestCase
             (new AttributeLoader())->loadClassMetadata($classMetadata);
         }
 
-        [$constraint1] = $classMetadata->properties['phoneNumber1']->constraints;
-        [$constraint2] = $classMetadata->properties['phoneNumber2']->constraints;
+        [$constraint1] = $classMetadata->getPropertyMetadata('phoneNumber1')[0]->getConstraints();
+        [$constraint2] = $classMetadata->getPropertyMetadata('phoneNumber2')[0]->getConstraints();
 
         $this->validator->validate('+33606060606', $constraint1);
         $this->validator->validate('+441234567890', $constraint2);
