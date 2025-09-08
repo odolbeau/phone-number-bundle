@@ -43,6 +43,8 @@ class ConfigurationTest extends TestCase
         yield [[], [
             'twig' => [
                 'enabled' => true,
+                'default_region' => 'ZZ',
+                'format' => PhoneNumberFormat::E164,
             ],
             'form' => [
                 'enabled' => true,
@@ -70,6 +72,8 @@ class ConfigurationTest extends TestCase
         ], [
             'twig' => [
                 'enabled' => false,
+                'default_region' => 'ZZ',
+                'format' => PhoneNumberFormat::E164,
             ],
             'form' => [
                 'enabled' => false,
@@ -91,6 +95,8 @@ class ConfigurationTest extends TestCase
             'misd_phone_number' => [
                 'twig' => [
                     'enabled' => false,
+                    'default_region' => 'GB',
+                    'format' => PhoneNumberFormat::E164,
                 ],
                 'form' => [
                     'enabled' => false,
@@ -109,6 +115,8 @@ class ConfigurationTest extends TestCase
         ], [
             'twig' => [
                 'enabled' => false,
+                'default_region' => 'GB',
+                'format' => PhoneNumberFormat::E164,
             ],
             'form' => [
                 'enabled' => false,
@@ -130,6 +138,8 @@ class ConfigurationTest extends TestCase
             'misd_phone_number' => [
                 'twig' => [
                     'enabled' => false,
+                    'default_region' => 'GB',
+                    'format' => 0,
                 ],
                 'form' => [
                     'enabled' => false,
@@ -148,6 +158,8 @@ class ConfigurationTest extends TestCase
         ], [
             'twig' => [
                 'enabled' => false,
+                'default_region' => 'GB',
+                'format' => PhoneNumberFormat::E164,
             ],
             'form' => [
                 'enabled' => false,
@@ -169,6 +181,8 @@ class ConfigurationTest extends TestCase
             'misd_phone_number' => [
                 'twig' => [
                     'enabled' => false,
+                    'default_region' => 'GB',
+                    'format' => 'E164',
                 ],
                 'form' => [
                     'enabled' => false,
@@ -187,6 +201,8 @@ class ConfigurationTest extends TestCase
         ], [
             'twig' => [
                 'enabled' => false,
+                'default_region' => 'GB',
+                'format' => PhoneNumberFormat::E164,
             ],
             'form' => [
                 'enabled' => false,

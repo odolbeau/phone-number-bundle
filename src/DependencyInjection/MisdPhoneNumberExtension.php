@@ -32,6 +32,9 @@ class MisdPhoneNumberExtension extends Extension
         $loader->load('services.xml');
         if ($config['twig']['enabled']) {
             $loader->load('twig.xml');
+
+            $container->setParameter('misd_phone_number.twig.default_region', $config['twig']['default_region']);
+            $container->setParameter('misd_phone_number.twig.format', $config['twig']['format']);
         }
         if ($config['form']['enabled']) {
             $loader->load('form.xml');
