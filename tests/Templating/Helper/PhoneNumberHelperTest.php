@@ -104,4 +104,34 @@ class PhoneNumberHelperTest extends TestCase
         yield ['1-800-854-3680', 'US', 'NL', '00 1 800-854-3680'];
         yield ['1-800-854-3680', 'US', 'ZZ', '+1 800-854-3680'];
     }
+
+    public function testFormatWithDefaultRegion(): void
+    {
+        $phoneNumberUtil = PhoneNumberUtil::getInstance();
+        $helper = new PhoneNumberHelper($phoneNumberUtil, 'US');
+
+        // Test with a US national format number, which should work with US as default region
+        $result = $helper->format('(800) 854-3680', PhoneNumberFormat::INTERNATIONAL);
+        $this->assertSame('+1 800-854-3680', $result);
+    }
+
+    public function testFormatWithoutDefaultRegion(): void
+    {
+        $phoneNumberUtil = PhoneNumberUtil::getInstance();
+        $helper = new PhoneNumberHelper($phoneNumberUtil);
+
+        // Test that parsing a national number without default region fails
+        $this->expectException(\libphonenumber\NumberParseException::class);
+        $helper->format('(800) 854-3680', PhoneNumberFormat::INTERNATIONAL);
+    }
+
+    public function testFormatWithDifferentDefaultRegion(): void
+    {
+        $phoneNumberUtil = PhoneNumberUtil::getInstance();
+        $helper = new PhoneNumberHelper($phoneNumberUtil, 'FR');
+
+        // Test with a French national format number with FR as default region
+        $result = $helper->format('01 42 34 56 78', PhoneNumberFormat::INTERNATIONAL);
+        $this->assertSame('+33 1 42 34 56 78', $result);
+    }
 }

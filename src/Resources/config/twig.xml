@@ -7,6 +7,8 @@
     <services>
         <service id="Misd\PhoneNumberBundle\Templating\Helper\PhoneNumberHelper">
             <argument type="service" id="libphonenumber\PhoneNumberUtil"/>
+            <argument>%misd_phone_number.twig.default_region%</argument>
+            <argument>%misd_phone_number.twig.format%</argument>
         </service>
 
         <service id="Misd\PhoneNumberBundle\Twig\Extension\PhoneNumberHelperExtension" public="false">

@@ -24,15 +24,27 @@ use Misd\PhoneNumberBundle\Exception\InvalidArgumentException;
 class PhoneNumberHelper
 {
     protected PhoneNumberUtil $phoneNumberUtil;
+    protected ?string $defaultRegion;
+    private PhoneNumberFormat $format;
 
-    public function __construct(PhoneNumberUtil $phoneNumberUtil)
-    {
+    public function __construct(
+        PhoneNumberUtil $phoneNumberUtil,
+        string $defaultRegion = PhoneNumberUtil::UNKNOWN_REGION,
+        PhoneNumberFormat|int $format = PhoneNumberFormat::INTERNATIONAL,
+    ) {
+        if (\is_int($format)) {
+            trigger_deprecation('odolbeau/phone-number-bundle', '4.2', 'Passing an int to the "format" argument is deprecated, pass a libphonenumber\PhoneNumberFormat instance instead.');
+            $format = PhoneNumberFormat::from($format);
+        }
+
         $this->phoneNumberUtil = $phoneNumberUtil;
+        $this->defaultRegion = mb_strtoupper($defaultRegion);
+        $this->format = $format;
     }
 
-    public function format(PhoneNumber|string $phoneNumber, string|int|PhoneNumberFormat $format = PhoneNumberFormat::INTERNATIONAL): string
+    public function format(PhoneNumber|string $phoneNumber, string|int|PhoneNumberFormat|null $format = null, ?string $region = null): string
     {
-        $phoneNumber = $this->getPhoneNumber($phoneNumber);
+        $phoneNumber = $this->getPhoneNumber($phoneNumber, $region);
 
         if (true === \is_string($format)) {
             $constant = '\libphonenumber\PhoneNumberFormat::'.$format;
@@ -51,7 +63,7 @@ class PhoneNumberHelper
             }
         }
 
-        return $this->phoneNumberUtil->format($phoneNumber, $format);
+        return $this->phoneNumberUtil->format($phoneNumber, $format ?? $this->format);
     }
 
     /**
@@ -90,10 +102,10 @@ class PhoneNumberHelper
         return $this->phoneNumberUtil->getNumberType($phoneNumber) === $type;
     }
 
-    private function getPhoneNumber(PhoneNumber|string $phoneNumber): PhoneNumber
+    private function getPhoneNumber(PhoneNumber|string $phoneNumber, ?string $region = null): PhoneNumber
     {
         if (\is_string($phoneNumber)) {
-            $phoneNumber = $this->phoneNumberUtil->parse($phoneNumber);
+            $phoneNumber = $this->phoneNumberUtil->parse($phoneNumber, $region ?? $this->defaultRegion);
         }
 
         if (!$phoneNumber instanceof PhoneNumber) {
