@@ -30,6 +30,11 @@ jobs:
             composer-flags: '--ignore-platform-req=php+'
             stability: dev
             can-fail: true
+          - php: nightly
+            symfony-require: 8.0.*@dev
+            composer-flags: '--ignore-platform-req=php+'
+            stability: dev
+            can-fail: true
       fail-fast: false
 
     steps:
