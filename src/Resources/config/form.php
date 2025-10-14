@@ -13,7 +13,7 @@ return function (ContainerConfigurator $container): void {
             ->tag('form.type', ['alias' => 'phone_number'])
 
         ->set(PhoneNumberTypeEqualityExtension::class)
-            ->tag('form.extension', ['extended_type' => PhoneNumberType::class])
+            ->tag('form.type_extension', ['extended_type' => PhoneNumberType::class])
             ->args([
                 service('form.property_accessor'),
             ]);
