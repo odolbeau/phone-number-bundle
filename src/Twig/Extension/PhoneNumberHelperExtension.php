@@ -26,37 +26,43 @@ class PhoneNumberHelperExtension extends AbstractExtension
     /**
      * Phone number helper.
      *
-     * @var PhoneNumberHelper
+     * @var PhoneNumberHelper|null
+     *
+     * @deprecated Use the PhoneNumberHelper as a Twig Runtime service instead
      */
     protected $helper;
 
     /**
      * Constructor.
      *
-     * @param PhoneNumberHelper $helper phone number helper
+     * @param PhoneNumberHelper|null $helper phone number helper, no longer directly used
      */
-    public function __construct(PhoneNumberHelper $helper)
+    public function __construct(?PhoneNumberHelper $helper = null)
     {
-        $this->helper = $helper;
+        if (null !== $helper) {
+            trigger_deprecation('odolbeau/phone-number-bundle', '4.3', 'Passing the "%s" to "%s" is deprecated in favor of using it as a Twig Runtime service.', PhoneNumberHelper::class, self::class);
+        }
     }
 
     public function getFilters(): array
     {
         return [
-            new TwigFilter('phone_number_format', [$this->helper, 'format']),
-            new TwigFilter('phone_number_format_out_of_country_calling_number', [$this->helper, 'formatOutOfCountryCallingNumber']),
+            new TwigFilter('phone_number_format', [PhoneNumberHelper::class, 'format']),
+            new TwigFilter('phone_number_format_out_of_country_calling_number', [PhoneNumberHelper::class, 'formatOutOfCountryCallingNumber']),
         ];
     }
 
     public function getTests(): array
     {
         return [
-            new TwigTest('phone_number_of_type', [$this->helper, 'isType']),
+            new TwigTest('phone_number_of_type', [PhoneNumberHelper::class, 'isType']),
         ];
     }
 
     /**
      * @return string
+     *
+     * @deprecated Unused by Twig since 2.0
      */
     public function getName()
     {

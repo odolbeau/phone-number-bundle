@@ -17,11 +17,12 @@ use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use Misd\PhoneNumberBundle\Exception\InvalidArgumentException;
+use Twig\Extension\RuntimeExtensionInterface;
 
 /**
  * Phone number templating helper.
  */
-class PhoneNumberHelper
+class PhoneNumberHelper implements RuntimeExtensionInterface
 {
     protected PhoneNumberUtil $phoneNumberUtil;
     protected ?string $defaultRegion;

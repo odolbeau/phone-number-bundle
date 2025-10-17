@@ -16,10 +16,8 @@ return function (ContainerConfigurator $container): void {
                 param('misd_phone_number.twig.default_region'),
                 param('misd_phone_number.twig.format'),
             ])
+            ->tag('twig.runtime')
 
         ->set(PhoneNumberHelperExtension::class)
-            ->tag('twig.extension')
-            ->args([
-                service(PhoneNumberHelper::class),
-            ]);
+            ->tag('twig.extension');
 };
