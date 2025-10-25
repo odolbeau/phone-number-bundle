@@ -16,6 +16,7 @@ namespace Misd\PhoneNumberBundle\Tests\Form\Type;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
+use Misd\PhoneNumberBundle\Tests\PhoneNumberSuiteConfig;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -136,7 +137,7 @@ class PhoneNumberTypeTest extends TestCase
      */
     public function testCountryChoiceChoices(array $choices, int $expectedChoicesCount, array $expectedChoices): void
     {
-        IntlTestHelper::requireIntl($this);
+        IntlTestHelper::requireIntl($this, PhoneNumberSuiteConfig::ICU_MINIMUM_VERSION);
 
         $form = $this->factory->create(
             PhoneNumberType::class,
@@ -258,7 +259,7 @@ class PhoneNumberTypeTest extends TestCase
      */
     public function testCountryChoicePlaceholder(?string $placeholder, ?string $expectedPlaceholder): void
     {
-        IntlTestHelper::requireIntl($this);
+        IntlTestHelper::requireIntl($this, PhoneNumberSuiteConfig::ICU_MINIMUM_VERSION);
         $form = $this->factory->create(PhoneNumberType::class, null, [
             'widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE,
             'country_placeholder' => $placeholder,
@@ -286,7 +287,7 @@ class PhoneNumberTypeTest extends TestCase
 
     public function testCountryChoiceTranslations(): void
     {
-        IntlTestHelper::requireFullIntl($this);
+        IntlTestHelper::requireFullIntl($this, PhoneNumberSuiteConfig::ICU_MINIMUM_VERSION);
         \Locale::setDefault('fr');
 
         $form = $this->factory->create(PhoneNumberType::class, null, [
