@@ -88,6 +88,10 @@ class PhoneNumberValidator extends ConstraintValidator
             return;
         }
 
+        if (null !== $constraint->requiredRegion && false === $this->phoneUtil->isValidNumberForRegion($phoneNumber, $constraint->requiredRegion)) {
+            $this->addViolation($value, $constraint);
+        }
+
         $validTypes = [];
         foreach ($constraint->getTypes() as $type) {
             switch ($type) {

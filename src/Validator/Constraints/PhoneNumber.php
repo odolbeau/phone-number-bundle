@@ -52,6 +52,7 @@ class PhoneNumber extends Constraint
     public string|array $type = self::ANY;
     public ?string $defaultRegion = null;
     public ?string $regionPath = null;
+    public ?string $requiredRegion = null;
     public ?PhoneNumberFormat $format = null;
 
     /**
@@ -69,6 +70,7 @@ class PhoneNumber extends Constraint
         ?array $groups = null,
         $payload = null,
         ?array $options = null,
+        ?string $requiredRegion = null,
     ) {
         parent::__construct($options, $groups, $payload);
 
@@ -82,6 +84,7 @@ class PhoneNumber extends Constraint
         $this->type = $type ?? $this->type;
         $this->defaultRegion = $defaultRegion ?? $this->defaultRegion;
         $this->regionPath = $regionPath ?? $this->regionPath;
+        $this->requiredRegion = $requiredRegion ?? $this->requiredRegion;
     }
 
     /**

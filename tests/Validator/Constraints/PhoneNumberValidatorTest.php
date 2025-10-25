@@ -57,8 +57,9 @@ class PhoneNumberValidatorTest extends TestCase
         ?string $defaultRegion = null,
         ?string $regionPath = null,
         PhoneNumberFormat|int|null $format = null,
+        ?string $requiredRegion = null,
     ): void {
-        $constraint = new PhoneNumber($format, $type, $defaultRegion, $regionPath);
+        $constraint = new PhoneNumber($format, $type, $defaultRegion, $regionPath, requiredRegion: $requiredRegion);
 
         if (true === $violates) {
             $constraintViolationBuilder = $this->createMock(ConstraintViolationBuilderInterface::class);
@@ -112,8 +113,18 @@ class PhoneNumberValidatorTest extends TestCase
      * 2 => Type (optional)
      * 3 => Default region (optional).
      * 4 => Region Path (optional).
+     * 5 => Format (optional)
+     * 6 => Required region (optional).
      *
-     * @return iterable<array{string|LibPhoneNumber|null, bool, 2?: string|string[]|null, 3?: ?string, 4?: ?string, 5?: PhoneNumberFormat|int|null}>
+     * @return iterable<array{
+     *     string|LibPhoneNumber|null,
+     *     bool,
+     *     2?: string|string[]|null,
+     *     3?: ?string,
+     *     4?: ?string,
+     *     5?: PhoneNumberFormat|int|null,
+     *     6?: string|null
+     *  }>
      */
     public function validateProvider(): iterable
     {
@@ -160,6 +171,8 @@ class PhoneNumberValidatorTest extends TestCase
         yield ['+33606060606', false, 'mobile', null, 'regionPath'];
         yield ['+33606060606', false, 'mobile', null, null, PhoneNumberFormat::E164];
         yield ['2015555555', true, null, null, null, PhoneNumberFormat::E164];
+        yield ['+33650505050', false, null, null, null, PhoneNumberFormat::E164, 'FR'];
+        yield ['+33650505050', true, null, null, null, PhoneNumberFormat::E164, 'GB'];
 
         // Ensure BC promise is respected
         yield ['+33606060606', false, 'mobile', null, null, 0];
