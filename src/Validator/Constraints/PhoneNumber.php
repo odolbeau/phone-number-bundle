@@ -39,6 +39,9 @@ class PhoneNumber extends Constraint
     public const VOIP = 'voip';
     public const VOICEMAIL = 'voicemail';
 
+    public const VALIDATION_TYPE_VALID_NUMBER = 'isValidNumber';
+    public const VALIDATION_TYPE_POSSIBLE_NUMBER = 'isPossibleNumber';
+
     public const INVALID_PHONE_NUMBER_ERROR = 'ca23f4ca-38f4-4325-9bcc-eb570a4abe7f';
 
     protected const ERROR_NAMES = [
@@ -54,10 +57,15 @@ class PhoneNumber extends Constraint
     public ?string $regionPath = null;
     public ?string $requiredRegion = null;
     public ?PhoneNumberFormat $format = null;
+    /**
+     * One of `self::VALIDATION_TYPE_VALID_NUMBER` or `self::VALIDATION_TYPE_POSSIBLE_NUMBER`.
+     */
+    public string $validationType = self::VALIDATION_TYPE_VALID_NUMBER;
 
     /**
-     * @param PhoneNumberFormat|null $format  Specify the format (\libphonenumber\PhoneNumberFormat::*)
+     * @param PhoneNumberFormat|null $format         Specify the format (\libphonenumber\PhoneNumberFormat::*)
      * @param string|string[]|null   $type
+     * @param string|null            $validationType One of self::VALIDATION_TYPE_VALID_NUMBER (default) or self::VALIDATION_TYPE_POSSIBLE_NUMBER
      * @param array<mixed>           $options
      */
     #[HasNamedArguments]
@@ -71,6 +79,7 @@ class PhoneNumber extends Constraint
         $payload = null,
         ?array $options = null,
         ?string $requiredRegion = null,
+        ?string $validationType = null,
     ) {
         parent::__construct($options, $groups, $payload);
 
@@ -85,6 +94,7 @@ class PhoneNumber extends Constraint
         $this->defaultRegion = $defaultRegion ?? $this->defaultRegion;
         $this->regionPath = $regionPath ?? $this->regionPath;
         $this->requiredRegion = $requiredRegion ?? $this->requiredRegion;
+        $this->validationType = $validationType ?? $this->validationType;
     }
 
     /**

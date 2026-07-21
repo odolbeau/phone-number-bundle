@@ -82,10 +82,18 @@ class PhoneNumberValidator extends ConstraintValidator
             $value = $this->phoneUtil->format($phoneNumber, $constraint->format ?? $this->format);
         }
 
-        if (false === $this->phoneUtil->isValidNumber($phoneNumber)) {
-            $this->addViolation($value, $constraint);
+        if (PhoneNumberConstraint::VALIDATION_TYPE_POSSIBLE_NUMBER === $constraint->validationType) {
+            if (false === $this->phoneUtil->isPossibleNumber($phoneNumber)) {
+                $this->addViolation($value, $constraint);
 
-            return;
+                return;
+            }
+        } else {
+            if (false === $this->phoneUtil->isValidNumber($phoneNumber)) {
+                $this->addViolation($value, $constraint);
+
+                return;
+            }
         }
 
         if (null !== $constraint->requiredRegion && false === $this->phoneUtil->isValidNumberForRegion($phoneNumber, $constraint->requiredRegion)) {

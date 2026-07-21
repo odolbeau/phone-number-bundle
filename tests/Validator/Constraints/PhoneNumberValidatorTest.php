@@ -58,8 +58,9 @@ class PhoneNumberValidatorTest extends TestCase
         ?string $regionPath = null,
         PhoneNumberFormat|int|null $format = null,
         ?string $requiredRegion = null,
+        ?string $validationType = null,
     ): void {
-        $constraint = new PhoneNumber($format, $type, $defaultRegion, $regionPath, requiredRegion: $requiredRegion);
+        $constraint = new PhoneNumber($format, $type, $defaultRegion, $regionPath, requiredRegion: $requiredRegion, validationType: $validationType);
 
         if (true === $violates) {
             $constraintViolationBuilder = $this->createMock(ConstraintViolationBuilderInterface::class);
@@ -100,9 +101,11 @@ class PhoneNumberValidatorTest extends TestCase
 
         [$constraint1] = $classMetadata->getPropertyMetadata('phoneNumber1')[0]->getConstraints();
         [$constraint2] = $classMetadata->getPropertyMetadata('phoneNumber2')[0]->getConstraints();
+        [$constraint3] = $classMetadata->getPropertyMetadata('phoneNumber3')[0]->getConstraints();
 
         $this->validator->validate('+33606060606', $constraint1);
         $this->validator->validate('+441234567890', $constraint2);
+        $this->validator->validate('+12530000000', $constraint3);
 
         $this->expectNotToPerformAssertions();
     }
@@ -115,6 +118,7 @@ class PhoneNumberValidatorTest extends TestCase
      * 4 => Region Path (optional).
      * 5 => Format (optional)
      * 6 => Required region (optional).
+     * 7 => validationType (optional).
      *
      * @return iterable<array{
      *     string|LibPhoneNumber|null,
@@ -123,7 +127,8 @@ class PhoneNumberValidatorTest extends TestCase
      *     3?: ?string,
      *     4?: ?string,
      *     5?: PhoneNumberFormat|int|null,
-     *     6?: string|null
+     *     6?: string|null,
+     *     7?: string|null
      *  }>
      */
     public function validateProvider(): iterable
@@ -174,6 +179,12 @@ class PhoneNumberValidatorTest extends TestCase
         yield ['+33650505050', false, null, null, null, PhoneNumberFormat::E164, 'FR'];
         yield ['+33650505050', true, null, null, null, PhoneNumberFormat::E164, 'GB'];
 
+        // Possible but not valid (libphonenumber): passes only with VALIDATION_TYPE_POSSIBLE_NUMBER
+        yield ['+12530000000', true];
+        yield ['+12530000000', false, null, null, null, null, null, PhoneNumber::VALIDATION_TYPE_POSSIBLE_NUMBER];
+        yield ['+12530000000', true, null, null, null, null, null, PhoneNumber::VALIDATION_TYPE_VALID_NUMBER];
+        yield ['+12530000000', true, PhoneNumber::MOBILE, null, null, null, null, PhoneNumber::VALIDATION_TYPE_POSSIBLE_NUMBER];
+
         // Ensure BC promise is respected
         yield ['+33606060606', false, 'mobile', null, null, 0];
         yield ['2015555555', true, null, null, null, 0];
@@ -206,6 +217,10 @@ class PhoneNumberDummy
     #[PhoneNumber(regionPath: 'regionPath')]
     /* @phpstan-ignore-next-line */
     private PhoneNumber $phoneNumber2;
+
+    #[PhoneNumber(validationType: PhoneNumber::VALIDATION_TYPE_POSSIBLE_NUMBER)]
+    /* @phpstan-ignore-next-line */
+    private PhoneNumber $phoneNumber3;
 
     public string $regionPath = 'GB';
 }

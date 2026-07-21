@@ -30,6 +30,21 @@ class PhoneNumberTest extends TestCase
         $this->assertObjectHasProperty('type', $phoneNumber);
         $this->assertObjectHasProperty('defaultRegion', $phoneNumber);
         $this->assertObjectHasProperty('regionPath', $phoneNumber);
+        $this->assertObjectHasProperty('validationType', $phoneNumber);
+    }
+
+    public function testValidationTypePropertyDefaultsToValidNumber(): void
+    {
+        $phoneNumber = new PhoneNumber();
+
+        $this->assertSame(PhoneNumber::VALIDATION_TYPE_VALID_NUMBER, $phoneNumber->validationType);
+    }
+
+    public function testValidationTypePropertyCanBeSetToPossibleNumber(): void
+    {
+        $phoneNumber = new PhoneNumber(validationType: PhoneNumber::VALIDATION_TYPE_POSSIBLE_NUMBER);
+
+        $this->assertSame(PhoneNumber::VALIDATION_TYPE_POSSIBLE_NUMBER, $phoneNumber->validationType);
     }
 
     /**
