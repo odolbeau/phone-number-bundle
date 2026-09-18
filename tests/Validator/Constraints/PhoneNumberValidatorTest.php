@@ -40,7 +40,11 @@ class PhoneNumberValidatorTest extends TestCase
         $this->context = $this->createMock(ExecutionContextInterface::class);
 
         $this->validator = new PhoneNumberValidator(PhoneNumberUtil::getInstance());
-        $this->validator->initialize($this->context);
+
+        if (!method_exists($this->validator, 'validateInContext')) {
+            // BC layer Symfony < 8.1
+            $this->validator->initialize($this->context);
+        }
 
         $this->context->method('getObject')->willReturn(new Foo());
     }
@@ -84,7 +88,12 @@ class PhoneNumberValidatorTest extends TestCase
             $this->context->expects($this->never())->method('buildViolation');
         }
 
-        $this->validator->validate($value, $constraint);
+        if (method_exists($this->validator, 'validateInContext')) {
+            $this->validator->validateInContext($value, $constraint, $this->context);
+        } else {
+            // BC layer Symfony < 8.1
+            $this->validator->validate($value, $constraint);
+        }
     }
 
     /**
@@ -103,9 +112,16 @@ class PhoneNumberValidatorTest extends TestCase
         [$constraint2] = $classMetadata->getPropertyMetadata('phoneNumber2')[0]->getConstraints();
         [$constraint3] = $classMetadata->getPropertyMetadata('phoneNumber3')[0]->getConstraints();
 
-        $this->validator->validate('+33606060606', $constraint1);
-        $this->validator->validate('+441234567890', $constraint2);
-        $this->validator->validate('+12530000000', $constraint3);
+        if (method_exists($this->validator, 'validateInContext')) {
+            $this->validator->validateInContext('+33606060606', $constraint1, $this->context);
+            $this->validator->validateInContext('+441234567890', $constraint2, $this->context);
+            $this->validator->validateInContext('+12530000000', $constraint3, $this->context);
+        } else {
+            // BC layer Symfony < 8.1
+            $this->validator->validate('+33606060606', $constraint1);
+            $this->validator->validate('+441234567890', $constraint2);
+            $this->validator->validate('+12530000000', $constraint3);
+        }
 
         $this->expectNotToPerformAssertions();
     }

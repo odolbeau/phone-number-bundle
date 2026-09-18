@@ -141,7 +141,12 @@ class PhoneNumberNormalizerTest extends TestCase
 
             $this->fail('Expected PartialDenormalizationException not thrown.');
         } catch (PartialDenormalizationException $e) {
-            $errors = $e->getErrors();
+            if (method_exists($e, 'getNotNormalizableValueErrors')) {
+                $errors = $e->getNotNormalizableValueErrors();
+            } else {
+                // BC layer Symfony < 8.1
+                $errors = $e->getErrors();
+            }
             $this->assertCount(1, $errors);
 
             $error = $errors[0];
