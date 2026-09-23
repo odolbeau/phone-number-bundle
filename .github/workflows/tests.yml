@@ -47,6 +47,8 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: intl-74.1
           coverage: none
+          # SYMFONY_REQUIRE below is only honored by the Flex plugin.
+          tools: flex
 
       - name: Configure Composer minimum stability
         if: matrix.stability

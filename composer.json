@@ -21,7 +21,7 @@
         "symfony/polyfill-mbstring": "^1.28"
     },
     "require-dev": {
-        "doctrine/doctrine-bundle": "^1.12|^2.0",
+        "doctrine/doctrine-bundle": "^1.12|^2.0|^3.0",
         "phpspec/prophecy-phpunit": "^2.3",
         "phpspec/prophecy": "^1.20",
         "phpunit/phpunit": "^9.6.11",
