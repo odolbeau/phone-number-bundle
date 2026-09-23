@@ -17,21 +17,16 @@ jobs:
           - php: 8.2
             symfony-require: 6.4.*
             composer-flags: '--prefer-stable'
-          # Active release
           - php: 8.3
-            symfony-require: 7.2.*
-            composer-flags: '--prefer-stable --ignore-platform-req=php+'
+            symfony-require: 7.4.*
+            composer-flags: '--prefer-stable'
+          # Active release
           - php: 8.4
-            symfony-require: 7.3.*
+            symfony-require: 8.1.*
             composer-flags: '--prefer-stable'
           # Development release
           - php: nightly
-            symfony-require: 7.4.*@dev
-            composer-flags: '--ignore-platform-req=php+'
-            stability: dev
-            can-fail: true
-          - php: nightly
-            symfony-require: 8.0.*@dev
+            symfony-require: 8.2.*@dev
             composer-flags: '--ignore-platform-req=php+'
             stability: dev
             can-fail: true
