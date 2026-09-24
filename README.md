@@ -279,6 +279,64 @@ private $phoneNumber;
 
 **Warning:** `VALIDATION_TYPE_POSSIBLE_NUMBER` is more permissive than `VALIDATION_TYPE_VALID_NUMBER`. It does not guarantee that the number is actually allocated or dialable as a real subscriber line. If you also restrict `type` (e.g. mobile vs fixed-line), a “possible but not valid” number may still fail validation when `getNumberType()` does not match — this avoids silently accepting ambiguous input.
 
+### Mapping phone numbers with the ObjectMapper
+
+#### Automatic conversion (Symfony 8.2+)
+
+With the [Symfony ObjectMapper](https://symfony.com/doc/current/object_mapper.html) 8.2 or later, phone numbers are converted from the property types, with no attribute needed:
+
+- a `libphonenumber\PhoneNumber` mapped to a `string` property is formatted, in the configured format (`PhoneNumberFormat::E164` by default);
+- a `string` mapped to a `PhoneNumber` property is parsed; numbers without a country code are read as belonging to the configured default region.
+
+```php
+use Symfony\Component\ObjectMapper\Attribute\Map;
+
+#[Map(source: Contact::class)] // Contact::$phoneNumber is a PhoneNumber
+final class ContactOutput
+{
+    public function __construct(
+        public string $phoneNumber, // "+441234567890"
+    ) {
+    }
+}
+```
+
+A string that can't be parsed makes the mapping throw a `MappingTransformException`: validate input first, e.g. with the `PhoneNumber` constraint (see [Validating phone numbers](#validating-phone-numbers)).
+
+The format and the default region are set in the [configuration](#configuration). Before Symfony 8.2, the ObjectMapper doesn't expose the types being mapped: use `PhoneNumberTransformer` explicitly, as below. Without it, a `PhoneNumber` mapped to a string ends up as its debug representation (`"Country Code: 44 National Number: 1234567890"`).
+
+#### Explicit conversion
+
+To use another format for one property, or with Symfony 7.4 and 8.1, set `PhoneNumberTransformer` on the property, right in the `Map` attribute; it takes precedence over the automatic conversion. It converts both ways, and a `null` number stays `null`:
+
+```php
+use libphonenumber\PhoneNumberFormat;
+use Misd\PhoneNumberBundle\ObjectMapper\PhoneNumberTransformer;
+use Symfony\Component\ObjectMapper\Attribute\Map;
+
+#[Map(source: Contact::class)]
+final class ContactOutput
+{
+    public function __construct(
+        #[Map(source: 'phoneNumber', transform: new PhoneNumberTransformer())]
+        public string $phoneNumber,
+        #[Map(source: 'phoneNumber', transform: new PhoneNumberTransformer(PhoneNumberFormat::INTERNATIONAL))]
+        public string $formattedPhoneNumber,
+    ) {
+    }
+}
+
+#[Map(target: Contact::class)]
+final class ContactInput
+{
+    public function __construct(
+        #[Map(transform: new PhoneNumberTransformer(defaultRegion: 'GB'))]
+        public string $phoneNumber, // "01234 567890"
+    ) {
+    }
+}
+```
+
 ### Translations
 
 The bundle contains translations for the form field and validation constraints.
@@ -297,6 +355,16 @@ misd_phone_number:
     form: false
     serializer: false
     validator: false
+    object_mapper: false
+```
+
+The automatic ObjectMapper conversion uses its own format and default region:
+
+```yaml
+misd_phone_number:
+    object_mapper:
+        format: !php/enum libphonenumber\PhoneNumberFormat::INTERNATIONAL # E164 by default
+        default_region: GB # none by default
 ```
 
 ## License

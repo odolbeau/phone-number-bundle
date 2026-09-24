@@ -16,9 +16,13 @@ namespace Misd\PhoneNumberBundle\Tests\DependencyInjection;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use Misd\PhoneNumberBundle\DependencyInjection\MisdPhoneNumberExtension;
+use Misd\PhoneNumberBundle\ObjectMapper\PhoneNumberMappingMetadataFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\TaggedContainerInterface;
+use Symfony\Component\ObjectMapper\Metadata\ReflectionObjectMapperMetadataFactory;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
 /**
  * Bundle extension test.
@@ -70,6 +74,7 @@ class MisdPhoneNumberExtensionTest extends TestCase
                 'form' => false,
                 'serializer' => false,
                 'validator' => false,
+                'object_mapper' => false,
             ],
         ], $this->container);
 
@@ -79,6 +84,7 @@ class MisdPhoneNumberExtensionTest extends TestCase
         $this->assertFalse($this->container->has('Misd\PhoneNumberBundle\Form\Type\PhoneNumberType'));
         $this->assertFalse($this->container->has('Misd\PhoneNumberBundle\Serializer\Normalizer\PhoneNumberNormalizer'));
         $this->assertFalse($this->container->has('Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumberValidator'));
+        $this->assertFalse($this->container->has('misd_phone_number.object_mapper.metadata_factory'));
     }
 
     public function testValidatorParameters(): void
@@ -113,5 +119,56 @@ class MisdPhoneNumberExtensionTest extends TestCase
 
         $this->assertSame('FR', $this->container->getParameter('misd_phone_number.serializer.default_region'));
         $this->assertSame(PhoneNumberFormat::INTERNATIONAL, $this->container->getParameter('misd_phone_number.serializer.format'));
+    }
+
+    public function testObjectMapperMetadataFactory(): void
+    {
+        if (!interface_exists(ObjectMapperInterface::class)) {
+            $this->markTestSkipped('The Symfony ObjectMapper is not available.');
+        }
+
+        $extension = new MisdPhoneNumberExtension();
+        $this->container = new ContainerBuilder();
+        $extension->load([
+            'misd_phone_number' => [
+                'object_mapper' => [
+                    'default_region' => 'FR',
+                    'format' => PhoneNumberFormat::INTERNATIONAL,
+                ],
+            ],
+        ], $this->container);
+
+        $definition = $this->container->getDefinition('misd_phone_number.object_mapper.metadata_factory');
+        $this->assertSame(PhoneNumberMappingMetadataFactory::class, $definition->getClass());
+        $this->assertSame(['object_mapper.metadata_factory', null, 0, ContainerInterface::IGNORE_ON_INVALID_REFERENCE], $definition->getDecoratedService());
+        $this->assertSame('FR', $this->container->getParameter('misd_phone_number.object_mapper.default_region'));
+        $this->assertSame(PhoneNumberFormat::INTERNATIONAL, $this->container->getParameter('misd_phone_number.object_mapper.format'));
+    }
+
+    public function testObjectMapperMetadataFactoryDecoratesTheObjectMapperOne(): void
+    {
+        if (!interface_exists(ObjectMapperInterface::class)) {
+            $this->markTestSkipped('The Symfony ObjectMapper is not available.');
+        }
+
+        $extension = new MisdPhoneNumberExtension();
+        $this->container = new ContainerBuilder();
+        $this->container->register('object_mapper.metadata_factory', ReflectionObjectMapperMetadataFactory::class)->setPublic(true);
+        $extension->load(['misd_phone_number' => ['twig' => false, 'form' => false, 'serializer' => false, 'validator' => false]], $this->container);
+        $this->container->compile();
+
+        $this->assertInstanceOf(PhoneNumberMappingMetadataFactory::class, $this->container->get('object_mapper.metadata_factory'));
+    }
+
+    public function testObjectMapperMetadataFactoryIsDroppedWhenTheObjectMapperIsNotWired(): void
+    {
+        $extension = new MisdPhoneNumberExtension();
+        $this->container = new ContainerBuilder();
+        $extension->load(['misd_phone_number' => ['object_mapper' => true]], $this->container);
+
+        // Would throw if the decorated service were required.
+        $this->container->compile();
+
+        $this->assertFalse($this->container->hasDefinition('misd_phone_number.object_mapper.metadata_factory'));
     }
 }

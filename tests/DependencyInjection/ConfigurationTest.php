@@ -17,6 +17,7 @@ use libphonenumber\PhoneNumberFormat;
 use Misd\PhoneNumberBundle\DependencyInjection\Configuration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
 class ConfigurationTest extends TestCase
 {
@@ -39,6 +40,9 @@ class ConfigurationTest extends TestCase
      */
     public function configurationDataProvider(): iterable
     {
+        // Enabled by default only when the ObjectMapper is installed.
+        $objectMapperEnabled = interface_exists(ObjectMapperInterface::class);
+
         // Empty Configuration
         yield [[], [
             'twig' => [
@@ -59,6 +63,11 @@ class ConfigurationTest extends TestCase
                 'default_region' => 'ZZ',
                 'format' => PhoneNumberFormat::INTERNATIONAL,
             ],
+            'object_mapper' => [
+                'enabled' => $objectMapperEnabled,
+                'default_region' => 'ZZ',
+                'format' => PhoneNumberFormat::E164,
+            ],
         ]];
 
         // Everything deactivated
@@ -68,6 +77,7 @@ class ConfigurationTest extends TestCase
                 'form' => false,
                 'serializer' => false,
                 'validator' => false,
+                'object_mapper' => false,
             ],
         ], [
             'twig' => [
@@ -87,6 +97,11 @@ class ConfigurationTest extends TestCase
                 'enabled' => false,
                 'default_region' => 'ZZ',
                 'format' => PhoneNumberFormat::INTERNATIONAL,
+            ],
+            'object_mapper' => [
+                'enabled' => false,
+                'default_region' => 'ZZ',
+                'format' => PhoneNumberFormat::E164,
             ],
         ]];
 
@@ -111,6 +126,11 @@ class ConfigurationTest extends TestCase
                     'default_region' => 'GB',
                     'format' => PhoneNumberFormat::INTERNATIONAL,
                 ],
+                'object_mapper' => [
+                    'enabled' => false,
+                    'default_region' => 'GB',
+                    'format' => PhoneNumberFormat::INTERNATIONAL,
+                ],
             ],
         ], [
             'twig' => [
@@ -127,6 +147,11 @@ class ConfigurationTest extends TestCase
                 'format' => PhoneNumberFormat::E164,
             ],
             'validator' => [
+                'enabled' => false,
+                'default_region' => 'GB',
+                'format' => PhoneNumberFormat::INTERNATIONAL,
+            ],
+            'object_mapper' => [
                 'enabled' => false,
                 'default_region' => 'GB',
                 'format' => PhoneNumberFormat::INTERNATIONAL,
@@ -174,6 +199,11 @@ class ConfigurationTest extends TestCase
                 'default_region' => 'GB',
                 'format' => PhoneNumberFormat::INTERNATIONAL,
             ],
+            'object_mapper' => [
+                'enabled' => $objectMapperEnabled,
+                'default_region' => 'ZZ',
+                'format' => PhoneNumberFormat::E164,
+            ],
         ]];
 
         // Same with BC (string)
@@ -216,6 +246,11 @@ class ConfigurationTest extends TestCase
                 'enabled' => false,
                 'default_region' => 'GB',
                 'format' => PhoneNumberFormat::INTERNATIONAL,
+            ],
+            'object_mapper' => [
+                'enabled' => $objectMapperEnabled,
+                'default_region' => 'ZZ',
+                'format' => PhoneNumberFormat::E164,
             ],
         ]];
     }

@@ -45,6 +45,12 @@ class MisdPhoneNumberExtension extends Extension
             $container->setParameter('misd_phone_number.serializer.default_region', $config['serializer']['default_region']);
             $container->setParameter('misd_phone_number.serializer.format', $config['serializer']['format']);
         }
+        if ($config['object_mapper']['enabled']) {
+            $loader->load('object_mapper.php');
+
+            $container->setParameter('misd_phone_number.object_mapper.default_region', $config['object_mapper']['default_region']);
+            $container->setParameter('misd_phone_number.object_mapper.format', $config['object_mapper']['format']);
+        }
         if ($config['validator']['enabled']) {
             $loader->load('validator.php');
 
