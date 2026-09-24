@@ -19,6 +19,7 @@ use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -119,6 +120,22 @@ class Configuration implements ConfigurationInterface
                                 ->ifTrue(static fn ($value) => \is_string($value) || \is_int($value))
                                 ->then($normalizeFormat)
                             ->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('object_mapper')
+                    ->addDefaultsIfNotSet()
+                    ->beforeNormalization()->always($normalizer)->end()
+                    ->children()
+                        ->scalarNode('enabled')
+                            ->defaultValue(interface_exists(ObjectMapperInterface::class))
+                        ->end()
+                        ->scalarNode('default_region')
+                            ->defaultValue(PhoneNumberUtil::UNKNOWN_REGION)
+                        ->end()
+                        ->enumNode('format')
+                            ->values(PhoneNumberFormat::cases())
+                            ->defaultValue(PhoneNumberFormat::E164)
                         ->end()
                     ->end()
                 ->end()

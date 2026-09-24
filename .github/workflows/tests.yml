@@ -49,6 +49,11 @@ jobs:
         if: matrix.stability
         run: composer config minimum-stability ${{ matrix.stability }}
 
+      # symfony/object-mapper doesn't exist on Symfony 6.4.
+      - name: Remove the ObjectMapper on Symfony 6.4
+        if: matrix.symfony-require == '6.4.*'
+        run: composer remove --dev --no-update symfony/object-mapper
+
       - name: Install dependencies
         env:
           SYMFONY_REQUIRE: ${{ matrix.symfony-require }}
