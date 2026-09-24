@@ -67,7 +67,14 @@ class PhoneNumberValidatorTest extends TestCase
         $constraint = new PhoneNumber($format, $type, $defaultRegion, $regionPath, requiredRegion: $requiredRegion, validationType: $validationType);
 
         if (true === $violates) {
-            $constraintViolationBuilder = $this->createMock(ConstraintViolationBuilderInterface::class);
+            $constraintViolationBuilder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class);
+            if (!method_exists(ConstraintViolationBuilderInterface::class, 'setParameter')) {
+                // Symfony 8.2+ only declares setParameter() as a @method annotation
+                $constraintViolationBuilder
+                    ->onlyMethods(get_class_methods(ConstraintViolationBuilderInterface::class))
+                    ->addMethods(['setParameter']);
+            }
+            $constraintViolationBuilder = $constraintViolationBuilder->getMock();
             $constraintViolationBuilder
                 ->expects($this->exactly(2))
                 ->method('setParameter')
